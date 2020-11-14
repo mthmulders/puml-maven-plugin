@@ -25,9 +25,9 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.m2/repository
-          key: spark-flash-${{ hashFiles('**/pom.xml') }}
+          key: puml-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            spark-flash
+            puml
 
       - name: Build and test code
         run: mvn verify
@@ -45,7 +45,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.m2/repository
-          key: spark-flash-${{ hashFiles('**/pom.xml') }}
+          key: puml-${{ hashFiles('**/pom.xml') }}
 
       - name: Set up JDK
         uses: actions/setup-java@v1
@@ -73,7 +73,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.m2/repository
-          key: spark-flash-${{ hashFiles('**/pom.xml') }}
+          key: puml-${{ hashFiles('**/pom.xml') }}
 
       - name: Set up JDK
         uses: actions/setup-java@v1

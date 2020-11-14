@@ -9,7 +9,7 @@
 
     <packaging>pom</packaging>
 
-    <name>PlantUML Maven Plugin :: parent</name>
+    <name>PlantUML Maven Plugin :: Parent</name>
     <url>https://github.com/mthmulders/puml-maven-plugin</url>
     <description>Maven Plugin for generating diagrams from PlantUML sources</description>
 
@@ -18,6 +18,10 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
+    <modules>
+        <module>maven-plugin</module>
+    </modules>
 
     <build>
         <pluginManagement>
@@ -287,7 +291,7 @@
         <profile>
             <id>sonarcloud</id>
             <properties>
-                <sonar.projectKey>mthmulders_spark-flash</sonar.projectKey>
+                <sonar.projectKey>mthmulders_puml-maven-plugin</sonar.projectKey>
                 <sonar.organization>mthmulders-github</sonar.organization>
                 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
             </properties>

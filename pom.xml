@@ -294,6 +294,7 @@
                 <sonar.projectKey>mthmulders_puml-maven-plugin</sonar.projectKey>
                 <sonar.organization>mthmulders-github</sonar.organization>
                 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+                <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
             </properties>
             <build>
                 <plugins>

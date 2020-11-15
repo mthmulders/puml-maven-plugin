@@ -1,0 +1,21 @@
+@startuml
+
+package "PlantUML API" {
+    interface PlantUmlFacade {
+    }
+}
+
+package "PlantUML Maven Plugin" {
+    class GenerateMojo
+    GenerateMojo : execute()
+}
+
+package "PlantUML v1 Adapter" {
+    class PlantUMLv1Impl {
+    }
+}
+
+PlantUmlFacade <|-- PlantUMLv1Impl
+PlantUmlFacade *-- GenerateMojo : use
+
+@enduml

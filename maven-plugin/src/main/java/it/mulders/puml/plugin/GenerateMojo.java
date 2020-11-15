@@ -16,13 +16,29 @@ package it.mulders.puml.plugin;
  * limitations under the License.
  */
 
+import it.mulders.puml.api.PlantUmlFacade;
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
+
+import javax.inject.Inject;
 
 @Mojo(name = "generate")
 public class GenerateMojo extends AbstractMojo {
-    @Override
-    public void execute() {
+    private final PlantUmlFactory factory;
 
+    @Inject
+    public GenerateMojo(final PlantUmlFactory factory) {
+        this.factory = factory;
+    }
+
+    @Override
+    public void execute() throws MojoExecutionException {
+        findPlantUmlFacade();
+    }
+
+    private PlantUmlFacade findPlantUmlFacade() throws MojoExecutionException {
+        return factory.findPlantUmlImplementation()
+                .orElseThrow(() -> new MojoExecutionException("No PlantUML adapter found. Add one to your classpath. This plugin will not work without it."));
     }
 }

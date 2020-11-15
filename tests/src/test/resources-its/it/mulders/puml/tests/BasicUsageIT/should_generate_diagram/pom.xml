@@ -22,12 +22,23 @@
     <artifactId>should-generate-diagram</artifactId>
     <version>1</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>it.mulders.puml</groupId>
                 <artifactId>plantuml-maven-plugin</artifactId>
                 <version>@project.version@</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>it.mulders.puml</groupId>
+                        <artifactId>plantuml-v1-adapter</artifactId>
+                        <version>@project.version@</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>

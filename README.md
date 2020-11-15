@@ -1,4 +1,6 @@
+# PUML Maven Plugin
 
+> A Maven Plugin for generating diagrams from PlantUML sources 
 
 ![Run tests](https://github.com/mthmulders/puml-maven-plugin/workflows/Run%20tests/badge.svg)
 [![SonarCloud quality gate](https://sonarcloud.io/api/project_badges/measure?project=mthmulders_puml-maven-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=mthmulders_puml-maven-plugin)

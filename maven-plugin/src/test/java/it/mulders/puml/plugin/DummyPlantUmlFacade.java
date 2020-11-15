@@ -1,4 +1,4 @@
-package it.mulders.puml.tests;
+package it.mulders.puml.plugin;
 
 /*
  * Copyright 2020 Maarten Mulders
@@ -16,18 +16,7 @@ package it.mulders.puml.tests;
  * limitations under the License.
  */
 
-import com.soebes.itf.jupiter.extension.MavenGoal;
-import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
-import com.soebes.itf.jupiter.extension.MavenTest;
-import com.soebes.itf.jupiter.maven.MavenExecutionResult;
+import it.mulders.puml.api.PlantUmlFacade;
 
-import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
-
-@MavenJupiterExtension
-public class BasicUsageIT {
-    @MavenTest
-    @MavenGoal("generate-resources")
-    void should_generate_diagram(final MavenExecutionResult result) {
-        assertThat(result).isSuccessful();
-    }
+public class DummyPlantUmlFacade implements PlantUmlFacade {
 }

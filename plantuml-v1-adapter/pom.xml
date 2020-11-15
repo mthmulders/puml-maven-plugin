@@ -24,6 +24,15 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>plantuml-maven-plugin</artifactId>
-    <name>PlantUML Maven Plugin :: Maven Plugin</name>
+    <artifactId>plantuml-v1-adapter</artifactId>
+    <name>PlantUML Maven Plugin :: PlantUML v1 Adapter</name>
+    <description>Adapter for using any PlantUML version that starts with 1.x.y.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>it.mulders.puml</groupId>
+            <artifactId>plantuml-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

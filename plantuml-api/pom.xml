@@ -24,6 +24,6 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>plantuml-maven-plugin</artifactId>
-    <name>PlantUML Maven Plugin :: Maven Plugin</name>
+    <artifactId>plantuml-api</artifactId>
+    <name>PlantUML Maven Plugin :: PlantUML API</name>
 </project>

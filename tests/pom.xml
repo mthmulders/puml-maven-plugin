@@ -83,7 +83,7 @@
                 <version>${itf.version}</version>
                 <executions>
                     <execution>
-                        <id>installing</id>
+                        <id>install-plugin</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>install</goal>

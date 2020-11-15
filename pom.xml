@@ -143,6 +143,9 @@
                         </dependency>
                     </dependencies>
                     <configuration>
+                        <avoidCallsTo>
+                            <avoidCallsTo>org.slf4j</avoidCallsTo>
+                        </avoidCallsTo>
                         <outputFormats>
                             <format>HTML2</format>
                         </outputFormats>

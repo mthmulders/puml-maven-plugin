@@ -115,6 +115,16 @@
                     </systemProperties>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <!-- necessary to prevent the test case pom.xml files from being filtered;
+                         use \${project.basedir} to refer to the test case project basedir. -->
+                    <escapeString>\</escapeString>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

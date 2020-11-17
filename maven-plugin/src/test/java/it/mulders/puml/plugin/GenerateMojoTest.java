@@ -16,10 +16,14 @@ package it.mulders.puml.plugin;
  * limitations under the License.
  */
 
+import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.mockito.Mockito.mock;
@@ -33,6 +37,7 @@ class GenerateMojoTest implements WithAssertions {
     @Test
     void should_fail_without_PlantUMLFactory_implementation() {
         // Arrange
+        mojo.setSourceFiles(prepareFileSet(Paths.get(".")));
         when(factory.findPlantUmlImplementation()).thenReturn(Optional.empty());
 
         // Act
@@ -43,4 +48,11 @@ class GenerateMojoTest implements WithAssertions {
             .hasMessageContaining("No PlantUML adapter found");
     }
 
+    private FileSet prepareFileSet(final Path basedir) {
+        final FileSet result = new FileSet();
+        result.setDirectory(basedir.toAbsolutePath().toString());
+        result.setIncludes(Collections.emptyList());
+        result.setExcludes(Collections.emptyList());
+        return result;
+    }
 }

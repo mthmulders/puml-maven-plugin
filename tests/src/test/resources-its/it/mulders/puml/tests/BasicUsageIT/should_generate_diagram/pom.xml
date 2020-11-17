@@ -39,6 +39,14 @@
                         <version>@project.version@</version>
                     </dependency>
                 </dependencies>
+                <configuration>
+                    <sourceFiles>
+                        <directory>\${project.basedir}</directory>
+                        <includes>
+                            <include>src/main/docs/**/*.puml</include>
+                        </includes>
+                    </sourceFiles>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>

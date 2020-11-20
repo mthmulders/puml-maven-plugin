@@ -16,22 +16,13 @@ package it.mulders.puml.api;
  * limitations under the License.
  */
 
+import lombok.Builder;
+import lombok.Getter;
+
 /**
  * Options to pass to PlantUML.
  */
+@Builder
+@Getter
 public class PlantUmlOptions {
-
-    private PlantUmlOptions() {
-    }
-
-    public static PlantUmlOptionsBuilder builder() {
-        return new PlantUmlOptionsBuilder();
-    }
-
-    public static class PlantUmlOptionsBuilder {
-        public PlantUmlOptions build() {
-            return new PlantUmlOptions(
-            );
-        }
-    }
 }

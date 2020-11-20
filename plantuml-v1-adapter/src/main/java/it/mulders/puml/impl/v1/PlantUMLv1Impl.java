@@ -20,8 +20,7 @@ import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
 import java.util.Collection;
@@ -29,9 +28,8 @@ import java.util.Collection;
 /**
  * Implementation of the {@link PlantUmlFacade} based on PlantUML v1.x.y.
  */
+@Slf4j
 public class PlantUMLv1Impl implements PlantUmlFacade {
-    private static final Logger logger = LoggerFactory.getLogger(PlantUmlFacade.class);
-
     /**
      * {@inheritDoc}
      */
@@ -40,7 +38,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         final Collection<Path> filesForProcessing = input.getFilesForProcessing();
 
         filesForProcessing.forEach(file -> {
-            logger.info("Processing file {}", file.toAbsolutePath());
+            log.info("Processing file {}", file.toAbsolutePath());
         });
 
         return new PlantUmlOutput.Success();

@@ -20,14 +20,15 @@ import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -38,20 +39,15 @@ import java.util.Collection;
 
 @Mojo(name = "generate")
 @Execute
+@RequiredArgsConstructor( onConstructor = @__( { @Inject }))
+@Setter
+@Slf4j
 public class GenerateMojo extends AbstractMojo {
-    private static final Logger logger = LoggerFactory.getLogger(GenerateMojo.class);
-
     private final InputFileLocator inputFileLocator;
     private final PlantUmlFactory plantUmlFactory;
 
     @Parameter(required=true, property="plantuml.sourceFiles")
     private FileSet sourceFiles;
-
-    @Inject
-    public GenerateMojo(final InputFileLocator inputFileLocator, final PlantUmlFactory plantUmlFactory) {
-        this.inputFileLocator = inputFileLocator;
-        this.plantUmlFactory = plantUmlFactory;
-    }
 
     @Override
     public void execute() throws MojoExecutionException {
@@ -77,13 +73,13 @@ public class GenerateMojo extends AbstractMojo {
         final Path directory = Paths.get(this.sourceFiles.getDirectory());
 
         if (!Files.isDirectory(directory)) {
-            logger.warn("Specified source directory is not a directory");
+            log.warn("Specified source directory is not a directory");
             return;
         }
 
         try {
             if (Files.list(directory).count() == 0) {
-                logger.warn("Specified source directory is empty");
+                log.warn("Specified source directory is empty");
                 return;
             }
         } catch (IOException e) {
@@ -94,9 +90,5 @@ public class GenerateMojo extends AbstractMojo {
     private PlantUmlFacade findPlantUmlFacade() throws MojoExecutionException {
         return plantUmlFactory.findPlantUmlImplementation()
                 .orElseThrow(() -> new MojoExecutionException("No PlantUML adapter found. Add one to your classpath. This plugin will not work without it."));
-    }
-
-    public void setSourceFiles(final FileSet sourceFiles) {
-        this.sourceFiles = sourceFiles;
     }
 }

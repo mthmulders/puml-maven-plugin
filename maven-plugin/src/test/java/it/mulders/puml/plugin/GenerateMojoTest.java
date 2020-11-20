@@ -21,24 +21,24 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class GenerateMojoTest implements WithAssertions {
-    private final PlantUmlFactory factory = mock(PlantUmlFactory.class);
+    private final InputFileLocator inputFileLocator = mock(InputFileLocator.class);
+    private final PlantUmlFactory plantUmlFactory = mock(PlantUmlFactory.class);
 
-    private final GenerateMojo mojo = new GenerateMojo(factory);
+    private final GenerateMojo mojo = new GenerateMojo(inputFileLocator, plantUmlFactory);
 
     @Test
     void should_fail_without_PlantUMLFactory_implementation() {
         // Arrange
-        mojo.setSourceFiles(prepareFileSet(Paths.get(".")));
-        when(factory.findPlantUmlImplementation()).thenReturn(Optional.empty());
+        FileSet fileSet = new FileSetBuilder().baseDirectory( Paths.get( "." ) ).build();
+        mojo.setSourceFiles(fileSet);
+        when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.empty());
 
         // Act
         assertThatThrownBy(mojo::execute)
@@ -46,13 +46,5 @@ class GenerateMojoTest implements WithAssertions {
         // Assert
             .isInstanceOf( MojoExecutionException.class)
             .hasMessageContaining("No PlantUML adapter found");
-    }
-
-    private FileSet prepareFileSet(final Path basedir) {
-        final FileSet result = new FileSet();
-        result.setDirectory(basedir.toAbsolutePath().toString());
-        result.setIncludes(Collections.emptyList());
-        result.setExcludes(Collections.emptyList());
-        return result;
     }
 }

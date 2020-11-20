@@ -80,6 +80,15 @@
 				<artifactId>maven-plugin-plugin</artifactId>
 				<version>${maven-plugin-tools.version}</version>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>src/test/resources/locating/*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

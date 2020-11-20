@@ -37,6 +37,10 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
     public PlantUmlOutput process(final PlantUmlInput input, final PlantUmlOptions options) {
         final Collection<Path> filesForProcessing = input.getFilesForProcessing();
 
+        if (filesForProcessing == null) {
+            return new PlantUmlOutput.Success();
+        }
+
         filesForProcessing.forEach(file -> {
             log.info("Processing file {}", file.toAbsolutePath());
         });

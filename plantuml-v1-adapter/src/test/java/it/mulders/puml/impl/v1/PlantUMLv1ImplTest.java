@@ -35,7 +35,6 @@ class PlantUMLv1ImplTest implements WithAssertions {
         // Act
         final PlantUmlOutput output = impl.process(input, options);
 
-
         // Assert
         assertThat(output.isSuccess()).isTrue();
 

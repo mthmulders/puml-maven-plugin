@@ -17,6 +17,9 @@ package it.mulders.puml.plugin;
  */
 
 import it.mulders.puml.api.PlantUmlFacade;
+import it.mulders.puml.api.PlantUmlInput;
+import it.mulders.puml.api.PlantUmlOptions;
+import it.mulders.puml.api.PlantUmlOutput;
 import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -36,7 +39,7 @@ import java.util.Collection;
 @Mojo(name = "generate")
 @Execute
 public class GenerateMojo extends AbstractMojo {
-    private static final Logger logger = LoggerFactory.getLogger( GenerateMojo.class );
+    private static final Logger logger = LoggerFactory.getLogger(GenerateMojo.class);
 
     private final InputFileLocator inputFileLocator;
     private final PlantUmlFactory plantUmlFactory;
@@ -56,11 +59,18 @@ public class GenerateMojo extends AbstractMojo {
 
         final Collection<Path> filesForProcessing = inputFileLocator.determineFilesForProcessing(this.sourceFiles);
 
-        filesForProcessing.forEach(file -> {
-            logger.info("Processing file {}", file.toAbsolutePath().toString());
-        });
+        final PlantUmlFacade plantUml = findPlantUmlFacade();
 
-        findPlantUmlFacade();
+        final PlantUmlInput input = PlantUmlInput.builder()
+                .filesForProcessing(filesForProcessing)
+                .build();
+        final PlantUmlOptions options = PlantUmlOptions.builder()
+                .build();
+
+        final PlantUmlOutput output = plantUml.process(input, options);
+        if (output.isFailure()) {
+            throw new MojoExecutionException(((PlantUmlOutput.Failure) output).getMessage());
+        }
     }
 
     private void verifyParameters() throws MojoExecutionException {

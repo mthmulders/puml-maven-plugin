@@ -20,29 +20,24 @@ import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.Test;
 
-import java.nio.file.Path;
-import java.util.Collection;
+class PlantUMLv1ImplTest implements WithAssertions {
+    private final PlantUmlFacade impl = new PlantUMLv1Impl();
 
-/**
- * Implementation of the {@link PlantUmlFacade} based on PlantUML v1.x.y.
- */
-public class PlantUMLv1Impl implements PlantUmlFacade {
-    private static final Logger logger = LoggerFactory.getLogger(PlantUmlFacade.class);
+    @Test
+    void should_return_success_output() {
+        // Arrange
+        final PlantUmlInput input = PlantUmlInput.builder().build();
+        final PlantUmlOptions options = PlantUmlOptions.builder().build();
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public PlantUmlOutput process(final PlantUmlInput input, final PlantUmlOptions options) {
-        final Collection<Path> filesForProcessing = input.getFilesForProcessing();
+        // Act
+        final PlantUmlOutput output = impl.process(input, options);
 
-        filesForProcessing.forEach(file -> {
-            logger.info("Processing file {}", file.toAbsolutePath());
-        });
 
-        return new PlantUmlOutput.Success();
+        // Assert
+        assertThat(output.isSuccess()).isTrue();
+
     }
 }

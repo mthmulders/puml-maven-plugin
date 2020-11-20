@@ -17,6 +17,13 @@ package it.mulders.puml.plugin;
  */
 
 import it.mulders.puml.api.PlantUmlFacade;
+import it.mulders.puml.api.PlantUmlInput;
+import it.mulders.puml.api.PlantUmlOptions;
+import it.mulders.puml.api.PlantUmlOutput;
 
 public class DummyPlantUmlFacade implements PlantUmlFacade {
+    @Override
+    public PlantUmlOutput process(final PlantUmlInput input, final PlantUmlOptions options) {
+        return null;
+    }
 }

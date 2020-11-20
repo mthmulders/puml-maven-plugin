@@ -17,14 +17,21 @@ package it.mulders.puml.api;
  */
 
 /**
- * Facade around invoking PlantUML. The interface and the types it uses are fully decoupled from PlantUML itself.
+ * Options to pass to PlantUML.
  */
-public interface PlantUmlFacade {
-    /**
-     * Invoke PlantUML with input and options.
-     * @param input The input for PlantUML to process.
-     * @param options The options to supply to PlantUML.
-     * @return The output of invoking PlantUML.
-     */
-    PlantUmlOutput process(final PlantUmlInput input, final PlantUmlOptions options);
+public class PlantUmlOptions {
+
+    private PlantUmlOptions() {
+    }
+
+    public static PlantUmlOptionsBuilder builder() {
+        return new PlantUmlOptionsBuilder();
+    }
+
+    public static class PlantUmlOptionsBuilder {
+        public PlantUmlOptions build() {
+            return new PlantUmlOptions(
+            );
+        }
+    }
 }

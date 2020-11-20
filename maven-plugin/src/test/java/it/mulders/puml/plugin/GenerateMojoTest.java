@@ -16,6 +16,8 @@ package it.mulders.puml.plugin;
  * limitations under the License.
  */
 
+import it.mulders.puml.api.PlantUmlFacade;
+import it.mulders.puml.api.PlantUmlOutput;
 import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.assertj.core.api.WithAssertions;
@@ -24,7 +26,9 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Paths;
 import java.util.Optional;
 
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class GenerateMojoTest implements WithAssertions {
@@ -36,7 +40,7 @@ class GenerateMojoTest implements WithAssertions {
     @Test
     void should_fail_without_PlantUMLFactory_implementation() {
         // Arrange
-        FileSet fileSet = new FileSetBuilder().baseDirectory( Paths.get( "." ) ).build();
+        FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get( "." )).build();
         mojo.setSourceFiles(fileSet);
         when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.empty());
 
@@ -46,5 +50,23 @@ class GenerateMojoTest implements WithAssertions {
         // Assert
             .isInstanceOf( MojoExecutionException.class)
             .hasMessageContaining("No PlantUML adapter found");
+    }
+
+    @Test
+    void should_invoke_PlantUMLFacade() throws MojoExecutionException
+    {
+        // Arrange
+        FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get( "." )).build();
+        mojo.setSourceFiles(fileSet);
+        final PlantUmlFacade plantUml = mock(PlantUmlFacade.class);
+        when(plantUmlFactory.findPlantUmlImplementation())
+                .thenReturn(Optional.of(plantUml));
+        when(plantUml.process(any(), any())).thenReturn(new PlantUmlOutput.Success());
+
+        // Act
+        mojo.execute();
+
+        // Assert
+        verify(plantUml).process(any(), any());
     }
 }

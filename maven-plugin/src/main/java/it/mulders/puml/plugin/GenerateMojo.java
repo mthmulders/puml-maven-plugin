@@ -51,7 +51,9 @@ public class GenerateMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
-        verifyParameters();
+        if (!verifyParameters()) {
+            return;
+        }
 
         final Collection<Path> filesForProcessing = inputFileLocator.determineFilesForProcessing(this.sourceFiles);
 
@@ -69,22 +71,15 @@ public class GenerateMojo extends AbstractMojo {
         }
     }
 
-    private void verifyParameters() throws MojoExecutionException {
+    private boolean verifyParameters() throws MojoExecutionException {
         final Path directory = Paths.get(this.sourceFiles.getDirectory());
 
         if (!Files.isDirectory(directory)) {
             log.warn("Specified source directory is not a directory");
-            return;
+            return false;
         }
 
-        try {
-            if (Files.list(directory).count() == 0) {
-                log.warn("Specified source directory is empty");
-                return;
-            }
-        } catch (IOException e) {
-            throw new MojoExecutionException("Could not scan source directory for files", e);
-        }
+        return true;
     }
 
     private PlantUmlFacade findPlantUmlFacade() throws MojoExecutionException {

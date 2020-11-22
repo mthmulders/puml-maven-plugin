@@ -21,6 +21,8 @@ import it.mulders.puml.api.PlantUmlOutput;
 import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
@@ -28,11 +30,14 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class GenerateMojoTest implements WithAssertions {
     private final InputFileLocator inputFileLocator = mock(InputFileLocator.class);
+    private final PlantUmlFacade plantUml = mock(PlantUmlFacade.class);
     private final PlantUmlFactory plantUmlFactory = mock(PlantUmlFactory.class);
 
     private final GenerateMojo mojo = new GenerateMojo(inputFileLocator, plantUmlFactory);
@@ -40,7 +45,7 @@ class GenerateMojoTest implements WithAssertions {
     @Test
     void should_fail_without_PlantUMLFactory_implementation() {
         // Arrange
-        FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get( "." )).build();
+        final FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get(".")).build();
         mojo.setSourceFiles(fileSet);
         when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.empty());
 
@@ -53,14 +58,11 @@ class GenerateMojoTest implements WithAssertions {
     }
 
     @Test
-    void should_invoke_PlantUMLFacade() throws MojoExecutionException
-    {
+    void should_invoke_PlantUMLFacade() throws MojoExecutionException {
         // Arrange
-        FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get( "." )).build();
+        final FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get(".")).build();
         mojo.setSourceFiles(fileSet);
-        final PlantUmlFacade plantUml = mock(PlantUmlFacade.class);
-        when(plantUmlFactory.findPlantUmlImplementation())
-                .thenReturn(Optional.of(plantUml));
+        when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.of(plantUml));
         when(plantUml.process(any(), any())).thenReturn(new PlantUmlOutput.Success());
 
         // Act
@@ -68,5 +70,21 @@ class GenerateMojoTest implements WithAssertions {
 
         // Assert
         verify(plantUml).process(any(), any());
+    }
+
+    @Test
+    void should_not_invoke_PlantUML_when_source_directory_is_invalid() throws MojoExecutionException {
+        // Arrange
+        final FileSet fileSet = new FileSetBuilder()
+                .baseDirectory(Paths.get("non-existing"))
+                .build();
+        mojo.setSourceFiles(fileSet);
+        when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.of(plantUml));
+
+        // Act
+        mojo.execute();
+
+        // Assert
+        verify(plantUml, never()).process(any(), any());
     }
 }

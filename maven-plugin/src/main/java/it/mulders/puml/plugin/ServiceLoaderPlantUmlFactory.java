@@ -48,17 +48,22 @@ public class ServiceLoaderPlantUmlFactory implements PlantUmlFactory {
         final ServiceLoader<PlantUmlFacade> loader = ServiceLoader.load(PlantUmlFacade.class);
         final Iterator<PlantUmlFacade> iterator = loader.iterator();
 
-        if (!iterator.hasNext()) {
+        return findSuitableImplementation(iterator);
+    }
+
+    // Visible for testing
+    Optional<PlantUmlFacade> findSuitableImplementation(final Iterator<PlantUmlFacade> implementations) {
+        if (!implementations.hasNext()) {
             return Optional.empty();
         }
 
-        final PlantUmlFacade implementation = iterator.next();
-        if (iterator.hasNext()) {
+        final PlantUmlFacade implementation = implementations.next();
+        if (implementations.hasNext()) {
             final String location = getLocationDescriptionForImplementation(implementation);
             log.warn("More than one PlantUML adapter found.");
             log.warn("Will continue with the first, detected at {}.", location);
-            while (iterator.hasNext()) {
-                final PlantUmlFacade alternative = iterator.next();
+            while (implementations.hasNext()) {
+                final PlantUmlFacade alternative = implementations.next();
                 final String alternativeLocation = getLocationDescriptionForImplementation(alternative);
                 log.warn("Alternative PlantUML adapter found in {}.", alternativeLocation);
             }

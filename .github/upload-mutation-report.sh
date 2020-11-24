@@ -18,22 +18,32 @@ set -Euo pipefail
 
 trap "rm mutation-testing-report.json" ERR
 
-reportJsLocation=$(find . -name "report.js")
-echo Found report.js at ${reportJsLocation}
-reportJsContent=$(<${reportJsLocation})
-report="${reportJsContent:60}"
-echo "${report}" > mutation-testing-report.json
-
 BASE_URL="https://dashboard.stryker-mutator.io"
 PROJECT="github.com/${GITHUB_REPOSITORY}"
 VERSION=${GITHUB_REF#refs/heads/}
 
-echo Uploading mutation-testing-report.json to ${BASE_URL}/api/reports/${PROJECT}/${VERSION}
-curl -X PUT \
-  ${BASE_URL}/api/reports/${PROJECT}/${VERSION} \
-  -H "Content-Type: application/json" \
-  -H "Host: dashboard.stryker-mutator.io" \
-  -H "X-Api-Key: ${API_KEY}" \
-  -d @mutation-testing-report.json
+reportJsLocations=$(find . -name "report.js")
+echo Found report.js files at ${reportJsLocations}
 
-rm mutation-testing-report.json
+for reportJsLocation in ${reportJsLocations}; do
+  echo Processing ${reportJsLocation}
+  reportJsContent=$(<${reportJsLocation})
+  report="${reportJsContent:60}"
+  echo "${report}" > mutation-testing-report.json
+
+  module=$(echo ${reportJsLocation} | sed -e "s|\./\(.*\)/target/pit-reports/html2/report.js|\1|g")
+  echo Module is ${module}
+
+  echo "Uploading mutation-testing-report.json to ${BASE_URL}/api/reports/${PROJECT}/${VERSION}?module=${module}"
+  curl -X PUT \
+    "${BASE_URL}/api/reports/${PROJECT}/${VERSION}?module=${module}" \
+    -H "Content-Type: application/json" \
+    -H "Host: dashboard.stryker-mutator.io" \
+    -H "X-Api-Key: ${API_KEY}" \
+    -d @mutation-testing-report.json
+
+  rm mutation-testing-report.json
+
+  echo
+
+done

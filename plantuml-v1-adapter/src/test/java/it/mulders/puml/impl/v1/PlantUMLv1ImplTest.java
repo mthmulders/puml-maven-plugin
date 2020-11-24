@@ -37,6 +37,5 @@ class PlantUMLv1ImplTest implements WithAssertions {
 
         // Assert
         assertThat(output.isSuccess()).isTrue();
-
     }
 }

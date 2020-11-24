@@ -23,6 +23,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import uk.org.lidalia.slf4jext.Level;
+import uk.org.lidalia.slf4jtest.LoggingEvent;
 import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
 import java.util.Arrays;
@@ -67,8 +68,21 @@ class ServiceLoaderPlantUmlFactoryTest implements WithAssertions {
     void should_return_first_implementation_when_more_than_one_implementation_found() {
         Iterator<PlantUmlFacade> implementations = Arrays.asList(impl1, impl2).iterator();
         Optional<PlantUmlFacade> result = factory.findSuitableImplementation(implementations);
-        assertThat(result).isPresent()
-                .hasValue(impl1);
+        assertThat(result).isPresent().hasValue(impl1);
+    }
+
+    @Test
+    void should_log_location_of_alternative_implementation() {
+        Iterator<PlantUmlFacade> implementations = Arrays.asList(impl1, impl2).iterator();
+        factory.findSuitableImplementation(implementations);
+        Optional<LoggingEvent> result = TestLoggerFactory.getLoggingEvents().stream()
+                .filter(e -> e.getMessage().contains("adapter found in"))
+                .findFirst();
+        assertThat(result).isPresent().hasValueSatisfying(event ->
+            assertThat(event.getArguments()).hasSize(1).satisfies(arg ->
+                assertThat(arg.toString()).contains("test-classes")
+            )
+        );
     }
 
     private final PlantUmlFacade impl1 = (input, options) -> null;

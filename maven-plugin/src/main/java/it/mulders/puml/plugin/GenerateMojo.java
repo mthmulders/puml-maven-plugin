@@ -31,7 +31,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import javax.inject.Inject;
-import java.io.IOException;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,15 +39,21 @@ import java.util.Collection;
 
 @Mojo(name = "generate")
 @Execute
-@RequiredArgsConstructor( onConstructor = @__( { @Inject }))
+@RequiredArgsConstructor(onConstructor = @__( { @Inject }))
 @Setter
 @Slf4j
 public class GenerateMojo extends AbstractMojo {
     private final InputFileLocator inputFileLocator;
     private final PlantUmlFactory plantUmlFactory;
 
-    @Parameter(required=true, property="plantuml.sourceFiles")
+    @Parameter(required = true, property = "plantuml.sourceFiles")
     private FileSet sourceFiles;
+
+    // Would be great if we could use java.nio.file.Path here.
+    // See https://bugs.eclipse.org/bugs/show_bug.cgi?id=563526
+    // and https://bugs.eclipse.org/bugs/show_bug.cgi?id=563525.
+    @Parameter(required = true, property = "plantuml.outputDirectory", defaultValue = "${project.build.directory}/plantuml")
+    private File outputDirectory;
 
     @Override
     public void execute() throws MojoExecutionException {
@@ -61,6 +67,7 @@ public class GenerateMojo extends AbstractMojo {
 
         final PlantUmlInput input = PlantUmlInput.builder()
                 .filesForProcessing(filesForProcessing)
+                .outputDirectory(Paths.get(outputDirectory.toURI()))
                 .build();
         final PlantUmlOptions options = PlantUmlOptions.builder()
                 .build();
@@ -71,7 +78,7 @@ public class GenerateMojo extends AbstractMojo {
         }
     }
 
-    private boolean verifyParameters() throws MojoExecutionException {
+    private boolean verifyParameters() {
         final Path directory = Paths.get(this.sourceFiles.getDirectory());
 
         if (!Files.isDirectory(directory)) {

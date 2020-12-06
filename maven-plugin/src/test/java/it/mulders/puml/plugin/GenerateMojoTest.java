@@ -17,17 +17,24 @@ package it.mulders.puml.plugin;
  */
 
 import it.mulders.puml.api.PlantUmlFacade;
+import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOutput;
 import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Optional;
 
+import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -41,6 +48,12 @@ class GenerateMojoTest implements WithAssertions {
     private final PlantUmlFactory plantUmlFactory = mock(PlantUmlFactory.class);
 
     private final GenerateMojo mojo = new GenerateMojo(inputFileLocator, plantUmlFactory);
+
+    @BeforeEach
+    void mock_PlantUML_implementation() {
+        when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.of(plantUml));
+        when(plantUml.process(any(), any())).thenReturn(new PlantUmlOutput.Success());
+    }
 
     @Test
     void should_fail_without_PlantUMLFactory_implementation() {
@@ -61,9 +74,8 @@ class GenerateMojoTest implements WithAssertions {
     void should_invoke_PlantUMLFacade() throws MojoExecutionException {
         // Arrange
         final FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get(".")).build();
+        mojo.setOutputDirectory(new File("target"));
         mojo.setSourceFiles(fileSet);
-        when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.of(plantUml));
-        when(plantUml.process(any(), any())).thenReturn(new PlantUmlOutput.Success());
 
         // Act
         mojo.execute();
@@ -73,13 +85,50 @@ class GenerateMojoTest implements WithAssertions {
     }
 
     @Test
+    void should_pass_files_to_process_to_PlantUML() throws MojoExecutionException {
+        // Arrange
+        final Collection<Path> files = singletonList(Paths.get( "./example.puml"));
+        when(inputFileLocator.determineFilesForProcessing(any())).thenReturn(files);
+        mojo.setSourceFiles(new FileSetBuilder().baseDirectory(Paths.get(".")).build());
+        mojo.setOutputDirectory(new File("target"));
+
+        // Act
+        mojo.execute();
+
+        // Assert
+        final ArgumentCaptor<PlantUmlInput> inputCaptor = ArgumentCaptor.forClass(PlantUmlInput.class);
+        verify(plantUml).process(inputCaptor.capture(), any());
+
+        final PlantUmlInput input = inputCaptor.getValue();
+        assertThat(input.getFilesForProcessing()).isEqualTo(files);
+    }
+
+    @Test
+    void should_pass_output_directory_to_PlantUML() throws MojoExecutionException {
+        // Arrange
+        final File outputDirectory = new File("target");
+        mojo.setOutputDirectory(outputDirectory);
+        mojo.setSourceFiles(new FileSetBuilder().baseDirectory(Paths.get(".")).build());
+
+        // Act
+        mojo.execute();
+
+        // Assert
+        final ArgumentCaptor<PlantUmlInput> inputCaptor = ArgumentCaptor.forClass(PlantUmlInput.class);
+        verify(plantUml).process(inputCaptor.capture(), any());
+
+        final PlantUmlInput input = inputCaptor.getValue();
+        assertThat(input.getOutputDirectory().toAbsolutePath()).isEqualTo(Paths.get(outputDirectory.toURI()));
+    }
+
+    @Test
     void should_not_invoke_PlantUML_when_source_directory_is_invalid() throws MojoExecutionException {
         // Arrange
         final FileSet fileSet = new FileSetBuilder()
                 .baseDirectory(Paths.get("non-existing"))
                 .build();
         mojo.setSourceFiles(fileSet);
-        when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.of(plantUml));
+        mojo.setOutputDirectory(new File("target"));
 
         // Act
         mojo.execute();

@@ -21,6 +21,9 @@ import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
 import com.soebes.itf.jupiter.extension.MavenTest;
 import com.soebes.itf.jupiter.maven.MavenExecutionResult;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
 
 @MavenJupiterExtension
@@ -29,5 +32,11 @@ public class BasicUsageIT {
     @MavenGoal("generate-resources")
     void should_generate_diagram(final MavenExecutionResult result) {
         assertThat(result).isSuccessful();
+
+        final Path baseDir = Paths.get(result.getMavenProjectResult().getBaseDir().toURI());
+        final Path outputDirectory = baseDir.resolve(Paths.get("target", "plantuml"));
+
+        assertThat(outputDirectory).exists();
+        assertThat(outputDirectory).isDirectory();
     }
 }

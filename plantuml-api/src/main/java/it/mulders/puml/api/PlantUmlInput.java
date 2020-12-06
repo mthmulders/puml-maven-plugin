@@ -29,4 +29,5 @@ import java.util.Collection;
 @Getter
 public class PlantUmlInput {
     private final Collection<Path> filesForProcessing;
+    private final Path outputDirectory;
 }

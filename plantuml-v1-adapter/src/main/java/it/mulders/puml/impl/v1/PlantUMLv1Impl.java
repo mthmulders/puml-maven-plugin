@@ -22,6 +22,8 @@ import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 
@@ -44,6 +46,18 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         filesForProcessing.forEach(file -> {
             log.info("Processing file {}", file.toAbsolutePath());
         });
+
+        try {
+            if (Files.exists(input.getOutputDirectory())) {
+                if (!Files.isDirectory(input.getOutputDirectory())) {
+                    return new PlantUmlOutput.Failure("Specified output directory exists but is a file rather than a directory");
+                }
+            } else {
+                Files.createDirectories( input.getOutputDirectory() );
+            }
+        } catch (IOException e) {
+            return new PlantUmlOutput.Failure(e);
+        }
 
         return new PlantUmlOutput.Success();
     }

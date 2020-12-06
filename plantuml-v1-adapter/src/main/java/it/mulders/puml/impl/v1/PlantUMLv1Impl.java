@@ -21,6 +21,7 @@ import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
 import lombok.extern.slf4j.Slf4j;
+import net.sourceforge.plantuml.version.Version;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -45,6 +46,8 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         }
 
         filesForProcessing.forEach(file -> log.info("Processing file {}", file.toAbsolutePath()));
+
+        log.info("Using PlantUML version {}", Version.versionString());
 
         try {
             if (Files.exists(input.getOutputDirectory())) {

@@ -21,8 +21,11 @@ import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
 import com.soebes.itf.jupiter.extension.MavenTest;
 import com.soebes.itf.jupiter.maven.MavenExecutionResult;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
 
@@ -30,13 +33,17 @@ import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
 public class BasicUsageIT {
     @MavenTest
     @MavenGoal("generate-resources")
-    void should_generate_diagram(final MavenExecutionResult result) {
+    void should_generate_diagram(final MavenExecutionResult result) throws IOException {
         assertThat(result).isSuccessful();
 
         final Path baseDir = Paths.get(result.getMavenProjectResult().getBaseDir().toURI());
         final Path outputDirectory = baseDir.resolve(Paths.get("target", "plantuml"));
+        assertThat(outputDirectory)
+                .exists()
+                .isDirectory();
 
-        assertThat(outputDirectory).exists();
-        assertThat(outputDirectory).isDirectory();
+
+        final List<String> log = Files.readAllLines(result.getMavenLog().getStdout());
+        assertThat(log).anySatisfy(line -> assertThat(line).contains("Using PlantUML version"));
     }
 }

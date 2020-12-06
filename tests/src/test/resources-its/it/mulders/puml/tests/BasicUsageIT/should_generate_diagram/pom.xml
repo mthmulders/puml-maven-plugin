@@ -38,6 +38,11 @@
                         <artifactId>plantuml-v1-adapter</artifactId>
                         <version>@project.version@</version>
                     </dependency>
+                    <dependency>
+                        <groupId>net.sourceforge.plantuml</groupId>
+                        <artifactId>plantuml</artifactId>
+                        <version>1.2020.9</version>
+                    </dependency>
                 </dependencies>
                 <configuration>
                     <sourceFiles>

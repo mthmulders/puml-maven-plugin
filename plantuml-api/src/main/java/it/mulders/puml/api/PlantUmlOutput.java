@@ -17,24 +17,25 @@ package it.mulders.puml.api;
  */
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Output of invoking PlantUML.
  */
 public interface PlantUmlOutput {
+    @AllArgsConstructor
+    @Getter
     class Success implements PlantUmlOutput {
+        private final int processedCount;
     }
 
     @AllArgsConstructor
+    @Getter
     class Failure implements PlantUmlOutput{
         private final String message;
 
         public Failure(final Throwable cause) {
             this.message = cause.getMessage();
-        }
-
-        public String getMessage() {
-            return this.message;
         }
     }
 

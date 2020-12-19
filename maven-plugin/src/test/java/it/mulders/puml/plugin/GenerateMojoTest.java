@@ -52,7 +52,7 @@ class GenerateMojoTest implements WithAssertions {
     @BeforeEach
     void mock_PlantUML_implementation() {
         when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.of(plantUml));
-        when(plantUml.process(any(), any())).thenReturn(new PlantUmlOutput.Success());
+        when(plantUml.process(any(), any())).thenReturn(new PlantUmlOutput.Success(0));
     }
 
     @Test
@@ -60,6 +60,7 @@ class GenerateMojoTest implements WithAssertions {
         // Arrange
         final FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get(".")).build();
         mojo.setSourceFiles(fileSet);
+        mojo.setFormat("svg");
         when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.empty());
 
         // Act
@@ -76,6 +77,8 @@ class GenerateMojoTest implements WithAssertions {
         final FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get(".")).build();
         mojo.setOutputDirectory(new File("target"));
         mojo.setSourceFiles(fileSet);
+        mojo.setFormat("svg");
+        mojo.setStripPath(new File("."));
 
         // Act
         mojo.execute();
@@ -91,6 +94,8 @@ class GenerateMojoTest implements WithAssertions {
         when(inputFileLocator.determineFilesForProcessing(any())).thenReturn(files);
         mojo.setSourceFiles(new FileSetBuilder().baseDirectory(Paths.get(".")).build());
         mojo.setOutputDirectory(new File("target"));
+        mojo.setFormat("svg");
+        mojo.setStripPath(new File("."));
 
         // Act
         mojo.execute();
@@ -109,6 +114,8 @@ class GenerateMojoTest implements WithAssertions {
         final File outputDirectory = new File("target");
         mojo.setOutputDirectory(outputDirectory);
         mojo.setSourceFiles(new FileSetBuilder().baseDirectory(Paths.get(".")).build());
+        mojo.setFormat("svg");
+        mojo.setStripPath(new File("."));
 
         // Act
         mojo.execute();
@@ -129,6 +136,7 @@ class GenerateMojoTest implements WithAssertions {
                 .build();
         mojo.setSourceFiles(fileSet);
         mojo.setOutputDirectory(new File("target"));
+        mojo.setFormat("svg");
 
         // Act
         mojo.execute();

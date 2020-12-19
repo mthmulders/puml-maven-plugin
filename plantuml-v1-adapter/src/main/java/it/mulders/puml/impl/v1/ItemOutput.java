@@ -1,4 +1,4 @@
-package it.mulders.puml.api;
+package it.mulders.puml.impl.v1;
 
 /*
  * Copyright 2020 Maarten Mulders
@@ -16,32 +16,14 @@ package it.mulders.puml.api;
  * limitations under the License.
  */
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
-/**
- * Options to pass to PlantUML.
- */
 @Builder
 @Getter
-public class PlantUmlOptions {
-    @AllArgsConstructor
-    @Getter
-    public enum Format {
-        SVG("svg");
-
-        private final String extension;
-
-        public Path convertFilename(final Path input) {
-            final String filename = input.toString().replaceAll("puml$", extension);
-            return Paths.get(filename);
-        }
-    }
-
-    private final Format format;
-    private final Path stripPath;
+public class ItemOutput {
+    private final Path input;
+    private final boolean success;
 }

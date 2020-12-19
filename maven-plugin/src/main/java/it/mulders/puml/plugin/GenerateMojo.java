@@ -19,6 +19,7 @@ package it.mulders.puml.plugin;
 import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
+import it.mulders.puml.api.PlantUmlOptions.Format;
 import it.mulders.puml.api.PlantUmlOutput;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -35,7 +36,10 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
+
+import static java.util.stream.Collectors.joining;
 
 @Mojo(name = "generate")
 @Execute
@@ -46,14 +50,38 @@ public class GenerateMojo extends AbstractMojo {
     private final InputFileLocator inputFileLocator;
     private final PlantUmlFactory plantUmlFactory;
 
+    /**
+     * Specify which files to process.
+     */
     @Parameter(required = true, property = "plantuml.sourceFiles")
     private FileSet sourceFiles;
 
     // Would be great if we could use java.nio.file.Path here.
     // See https://bugs.eclipse.org/bugs/show_bug.cgi?id=563526
     // and https://bugs.eclipse.org/bugs/show_bug.cgi?id=563525.
+    /**
+     * Specify where to place generated diagrams.
+     */
     @Parameter(required = true, property = "plantuml.outputDirectory", defaultValue = "${project.build.directory}/plantuml")
     private File outputDirectory;
+
+    // Would be great if we could use java.nio.file.Path here.
+    // See https://bugs.eclipse.org/bugs/show_bug.cgi?id=563526
+    // and https://bugs.eclipse.org/bugs/show_bug.cgi?id=563525.
+    /**
+     * Specifies a directory to strip from each file in {@link #sourceFiles} before building the output file name.
+     */
+    @Parameter(required = true, property = "plantuml.stripPath", defaultValue = "plantuml")
+    private File stripPath;
+
+    /**
+     * Specify which format the diagrams should be generated in. Options:
+     * <ul>
+     *     <li>SVG</li>
+     * </ul>
+     */
+    @Parameter(required = true, property = "plantuml.format")
+    private String format;
 
     @Override
     public void execute() throws MojoExecutionException {
@@ -70,6 +98,8 @@ public class GenerateMojo extends AbstractMojo {
                 .outputDirectory(Paths.get(outputDirectory.toURI()))
                 .build();
         final PlantUmlOptions options = PlantUmlOptions.builder()
+                .format(determineOutputFormat())
+                .stripPath(Paths.get(stripPath.toURI()))
                 .build();
 
         final PlantUmlOutput output = plantUml.process(input, options);
@@ -78,11 +108,28 @@ public class GenerateMojo extends AbstractMojo {
         }
     }
 
+    private Format determineOutputFormat() {
+        if ("svg".equalsIgnoreCase(this.format)) {
+            return Format.SVG;
+        }
+        return null;
+    }
+
     private boolean verifyParameters() {
         final Path directory = Paths.get(this.sourceFiles.getDirectory());
 
         if (!Files.isDirectory(directory)) {
             log.warn("Specified source directory is not a directory");
+            return false;
+        }
+
+        final boolean validFormat = Arrays.stream(Format.values())
+                .map(Format::name)
+                .map(String::toUpperCase)
+                .anyMatch(this.format::equalsIgnoreCase);
+        if (!validFormat) {
+            final String formats = Arrays.stream(Format.values()).map(Format::name).collect(joining(", "));
+            log.warn("Specified output format is not valid; supported options are " + formats);
             return false;
         }
 

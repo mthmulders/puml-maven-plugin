@@ -45,12 +45,14 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <format>SVG</format>
                     <sourceFiles>
                         <directory>\${project.basedir}</directory>
                         <includes>
                             <include>src/main/docs/**/*.puml</include>
                         </includes>
                     </sourceFiles>
+                    <stripPath>src/main</stripPath>
                 </configuration>
                 <executions>
                     <execution>

@@ -42,8 +42,10 @@ public class BasicUsageIT {
                 .exists()
                 .isDirectory();
 
+        final Path outputFile = outputDirectory.resolve(Paths.get("docs", "example.svg"));
 
         final List<String> log = Files.readAllLines(result.getMavenLog().getStdout());
         assertThat(log).anySatisfy(line -> assertThat(line).contains("Using PlantUML version"));
+        assertThat(Files.walk(outputDirectory)).contains(outputFile);
     }
 }

@@ -20,6 +20,8 @@ import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
+import it.mulders.puml.api.PlantUmlOutput.Failure;
+import it.mulders.puml.api.PlantUmlOutput.Success;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.plantuml.version.Version;
 
@@ -42,7 +44,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
 
         if (filesForProcessing == null || filesForProcessing.isEmpty()) {
             log.info("No input files to process");
-            return new PlantUmlOutput.Success();
+            return new Success();
         }
 
         filesForProcessing.forEach(file -> log.info("Processing file {}", file.toAbsolutePath()));
@@ -52,15 +54,15 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         try {
             if (Files.exists(input.getOutputDirectory())) {
                 if (!Files.isDirectory(input.getOutputDirectory())) {
-                    return new PlantUmlOutput.Failure("Specified output directory exists but is a file rather than a directory");
+                    return new Failure("Specified output directory exists but is a file rather than a directory");
                 }
             } else {
                 Files.createDirectories( input.getOutputDirectory() );
             }
         } catch (IOException e) {
-            return new PlantUmlOutput.Failure(e);
+            return new Failure(e);
         }
 
-        return new PlantUmlOutput.Success();
+        return new Success();
     }
 }

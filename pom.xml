@@ -32,6 +32,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <junit-jupiter.version>5.7.0</junit-jupiter.version>
     </properties>
 
     <modules>
@@ -268,7 +270,7 @@
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
-                <version>5.7.0</version>
+                <version>${junit-jupiter.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

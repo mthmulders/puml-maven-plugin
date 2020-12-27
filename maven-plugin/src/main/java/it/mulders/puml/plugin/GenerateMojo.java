@@ -111,11 +111,9 @@ public class GenerateMojo extends AbstractMojo {
         }
     }
 
-    private Format determineOutputFormat() {
-        if ("svg".equalsIgnoreCase(this.format)) {
-            return Format.SVG;
-        }
-        return null;
+    private Format determineOutputFormat() throws MojoExecutionException {
+        return Format.fromExtension(this.format)
+                .orElseThrow(() -> new MojoExecutionException("Unknown output format " + this.format));
     }
 
     private boolean verifyParameters() {
@@ -126,13 +124,10 @@ public class GenerateMojo extends AbstractMojo {
             return false;
         }
 
-        final boolean validFormat = Arrays.stream(Format.values())
-                .map(Format::name)
-                .map(String::toUpperCase)
-                .anyMatch(this.format::equalsIgnoreCase);
+        final boolean validFormat = Format.fromExtension(this.format).isPresent();
         if (!validFormat) {
             final String formats = Arrays.stream(Format.values()).map(Format::name).collect(joining(", "));
-            log.warn("Specified output format is not valid; supported options are " + formats);
+            log.error("Specified output format is not valid; supported options are " + formats);
             return false;
         }
 

@@ -22,6 +22,8 @@ import lombok.Getter;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * Options to pass to PlantUML.
@@ -39,6 +41,12 @@ public class PlantUmlOptions {
         public Path convertFilename(final Path input) {
             final String filename = input.toString().replaceAll("puml$", extension);
             return Paths.get(filename);
+        }
+
+        public static Optional<Format> fromExtension(final String input) {
+            return Arrays.stream(Format.values())
+                    .filter(f -> f.getExtension().equalsIgnoreCase(input))
+                    .findAny();
         }
     }
 

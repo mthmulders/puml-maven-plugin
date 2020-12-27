@@ -122,7 +122,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         final String headless = System.getProperty(HEADLESS);
 
         try {
-            System.setProperty("java.awt.headless", "true");
+            System.setProperty(HEADLESS, "true");
             reader.outputImage( output, fileFormatOption( options ) );
         } finally {
             // Restore old value

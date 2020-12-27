@@ -23,6 +23,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -31,6 +32,20 @@ class ItemOutputCollectorTest implements WithAssertions {
     void with_no_inputs_should_return_success() {
         // Arrange
         final Stream<ItemOutput> inputs = Stream.of();
+
+        // Act
+        final PlantUmlOutput output = inputs.collect(new ItemOutputCollector());
+
+        // Assert
+        assertThat(output.isSuccess()).isTrue();
+    }
+
+    @Test
+    void with_thousand_inputs_should_return_success() {
+        // Arrange
+        final Stream<ItemOutput> inputs = IntStream.rangeClosed( 0, 10 )
+                .parallel()
+                .mapToObj( i -> ItemOutput.builder().success(true).build() );
 
         // Act
         final PlantUmlOutput output = inputs.collect(new ItemOutputCollector());

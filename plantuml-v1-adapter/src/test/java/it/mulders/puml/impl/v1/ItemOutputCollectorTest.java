@@ -17,6 +17,7 @@ package it.mulders.puml.impl.v1;
  */
 
 import it.mulders.puml.api.PlantUmlOutput;
+import it.mulders.puml.api.PlantUmlOutput.Success;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -38,12 +39,13 @@ class ItemOutputCollectorTest implements WithAssertions {
 
         // Assert
         assertThat(output.isSuccess()).isTrue();
+        assertThat(((Success) output).getProcessedCount()).isEqualTo(0);
     }
 
     @Test
-    void with_thousand_inputs_should_return_success() {
+    void should_work_with_parallel_stream() {
         // Arrange
-        final Stream<ItemOutput> inputs = IntStream.rangeClosed( 0, 10 )
+        final Stream<ItemOutput> inputs = IntStream.rangeClosed(0, 10)
                 .parallel()
                 .mapToObj( i -> ItemOutput.builder().success(true).build() );
 
@@ -52,6 +54,7 @@ class ItemOutputCollectorTest implements WithAssertions {
 
         // Assert
         assertThat(output.isSuccess()).isTrue();
+        assertThat(((Success) output).getProcessedCount()).isEqualTo(11);
     }
 
     @Test
@@ -67,7 +70,7 @@ class ItemOutputCollectorTest implements WithAssertions {
 
         // Assert
         assertThat(output.isSuccess()).isTrue();
-        assertThat(((PlantUmlOutput.Success) output).getProcessedCount()).isEqualTo(2);
+        assertThat(((Success) output).getProcessedCount()).isEqualTo(2);
     }
 
     @Test

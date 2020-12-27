@@ -148,6 +148,9 @@
                         <avoidCallsTo>
                             <avoidCallsTo>org.slf4j</avoidCallsTo>
                         </avoidCallsTo>
+                        <excludedClasses>
+                            <excludedClass>*Builder</excludedClass>
+                        </excludedClasses>
                         <outputFormats>
                             <format>HTML2</format>
                         </outputFormats>

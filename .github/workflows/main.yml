@@ -21,7 +21,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [8, 11, 15, 16-ea]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
@@ -30,7 +35,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: ${{ matrix.java }}
 
       - name: Set up cache for ~./m2/repository
         uses: actions/cache@v2.1.3

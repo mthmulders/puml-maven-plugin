@@ -20,8 +20,9 @@ import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
-import it.mulders.puml.api.PlantUmlOutput.Failure;
 import it.mulders.puml.api.PlantUmlOutput.Success;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -32,10 +33,8 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -46,8 +45,15 @@ import static java.util.stream.Collectors.toMap;
 /**
  * Implementation of the {@link PlantUmlFacade} based on PlantUML v1.x.y.
  */
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
 public class PlantUMLv1Impl implements PlantUmlFacade {
+    private final OutputDirector outputDirector;
+
+    public PlantUMLv1Impl() {
+        this(new OutputDirector());
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -64,46 +70,23 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
 
         final Path outputDirectory = input.getOutputDirectory();
         final Map<Path, Path> inputToOutputMapping = filesForProcessing.stream()
-                .collect(toMap(identity(), path -> computeOutputPath( path, outputDirectory, options)));
+                .collect(toMap(identity(), path -> outputDirector.computeOutputPath( path, outputDirectory, options)));
 
         return inputToOutputMapping.values().stream()
                 // Validate the output directory for each file that we must process
-                .map(outputPath -> ensureOutputDirectoryExists(outputPath.getParent()))
+                .map(outputPath -> outputDirector.ensureOutputDirectoryExists(outputPath.getParent()))
                 // Filter items where the output directory could not be created
                 .filter(Optional::isPresent)
                 // Get the first failure
                 .map(Optional::get)
+                .map(PlantUmlOutput.class::cast)
                 .findAny()
                 // ... otherwise, start processing files.
                 .orElseGet(() ->
                     inputToOutputMapping.entrySet().stream()
-                            .map(entry ->  processDiagram(entry.getKey(), entry.getValue(), options))
+                            .map(entry -> processDiagram(entry.getKey(), entry.getValue(), options))
                             .collect(new ItemOutputCollector())
                 );
-    }
-
-    // Visible for testing
-    Path computeOutputPath(final Path inputPath, final Path outputDirectory, final PlantUmlOptions options) {
-        final Path workingDirectory = Paths.get("").toAbsolutePath();
-        final Path stripPath = options.getStripPath();
-        final Path relativeInputPath = workingDirectory.resolve(stripPath).relativize(inputPath.toAbsolutePath());
-        final Path relativeOutputPath = options.getFormat().convertFilename(relativeInputPath);
-
-        final Path outputPath = outputDirectory.resolve(relativeOutputPath);
-        log.debug("Computed output path {} for input {}", outputPath, inputPath);
-        return outputPath;
-    }
-
-    // Visible for testing
-    Optional<PlantUmlOutput> ensureOutputDirectoryExists(final Path outputDirectory) {
-        try {
-            Files.createDirectories(outputDirectory);
-        } catch (FileAlreadyExistsException faee) {
-            return Optional.of(new Failure("Specified output directory exists but is a file, not a directory"));
-        } catch (IOException e) {
-            return Optional.of(new Failure(e));
-        }
-        return Optional.empty();
     }
 
     private ItemOutput processDiagram(final Path inputPath, final Path outputPath, final PlantUmlOptions options) {

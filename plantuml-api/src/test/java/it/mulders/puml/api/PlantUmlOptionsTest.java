@@ -29,7 +29,7 @@ import java.nio.file.Paths;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PlantUmlOptionsTest implements WithAssertions {
-    @EnumSource( Format.class)
+    @EnumSource(Format.class)
     @ParameterizedTest
     void convert_filename(final Format format) {
         // Act

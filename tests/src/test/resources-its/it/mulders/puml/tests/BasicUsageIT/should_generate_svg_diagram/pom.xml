@@ -19,7 +19,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>it.mulders.puml.tests</groupId>
-    <artifactId>should-generate-diagram</artifactId>
+    <artifactId>should-generate-svg-diagram</artifactId>
     <version>1</version>
 
     <properties>

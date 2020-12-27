@@ -33,7 +33,7 @@ import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
 public class BasicUsageIT {
     @MavenTest
     @MavenGoal("generate-resources")
-    void should_generate_diagram(final MavenExecutionResult result) throws IOException {
+    void should_generate_svg_diagram(final MavenExecutionResult result) throws IOException {
         assertThat(result).isSuccessful();
 
         final Path baseDir = Paths.get(result.getMavenProjectResult().getBaseDir().toURI());

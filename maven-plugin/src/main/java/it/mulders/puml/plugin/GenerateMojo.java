@@ -41,6 +41,9 @@ import java.util.Collection;
 
 import static java.util.stream.Collectors.joining;
 
+/**
+ * Generates diagrams from a set of input files.
+ */
 @Mojo(name = "generate")
 @Execute
 @RequiredArgsConstructor(onConstructor = @__( { @Inject }))

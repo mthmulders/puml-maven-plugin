@@ -16,9 +16,11 @@ package it.mulders.puml.api;
  * limitations under the License.
  */
 
+import it.mulders.puml.api.PlantUmlOptions.Format;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
@@ -27,13 +29,31 @@ import java.nio.file.Paths;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PlantUmlOptionsTest implements WithAssertions {
-    @EnumSource(PlantUmlOptions.Format.class)
+    @EnumSource( Format.class)
     @ParameterizedTest
-    void convert_filename(final PlantUmlOptions.Format format) {
+    void convert_filename(final Format format) {
         // Act
         final Path result = format.convertFilename(Paths.get("example.puml"));
 
         // Assert
         assertThat(result.toString()).endsWith(format.getExtension());
+    }
+
+    private static final Format format = Format.SVG;
+    private static final Path stripPath = Paths.get("src/main/docs");
+
+    private final PlantUmlOptions result = PlantUmlOptions.builder()
+            .format(format)
+            .stripPath(stripPath)
+            .build();
+
+    @Test
+    void format() {
+        assertThat(result.getFormat()).isEqualTo(format);
+    }
+
+    @Test
+    void stripPath() {
+        assertThat(result.getStripPath()).isEqualTo(stripPath);
     }
 }

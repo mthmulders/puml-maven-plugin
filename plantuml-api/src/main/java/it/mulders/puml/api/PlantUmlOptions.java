@@ -34,6 +34,7 @@ public class PlantUmlOptions {
     @AllArgsConstructor
     @Getter
     public enum Format {
+        PNG("png"),
         SVG("svg");
 
         private final String extension;

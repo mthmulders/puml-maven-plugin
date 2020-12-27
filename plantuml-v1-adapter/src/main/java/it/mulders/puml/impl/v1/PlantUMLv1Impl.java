@@ -136,6 +136,8 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
 
     FileFormatOption fileFormatOption(final PlantUmlOptions options) {
         switch (options.getFormat()) {
+            case PNG:
+                return new FileFormatOption(FileFormat.PNG, false);
             case SVG:
                 return new FileFormatOption(FileFormat.SVG, false);
             default:

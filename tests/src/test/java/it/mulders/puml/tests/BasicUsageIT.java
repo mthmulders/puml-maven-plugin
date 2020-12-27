@@ -48,4 +48,22 @@ public class BasicUsageIT {
         assertThat(log).anySatisfy(line -> assertThat(line).contains("Using PlantUML version"));
         assertThat(Files.walk(outputDirectory)).contains(outputFile);
     }
+
+    @MavenTest
+    @MavenGoal("generate-resources")
+    void should_generate_png_diagram(final MavenExecutionResult result) throws IOException {
+        assertThat(result).isSuccessful();
+
+        final Path baseDir = Paths.get(result.getMavenProjectResult().getBaseDir().toURI());
+        final Path outputDirectory = baseDir.resolve(Paths.get("target", "plantuml"));
+        assertThat(outputDirectory)
+                .exists()
+                .isDirectory();
+
+        final Path outputFile = outputDirectory.resolve(Paths.get("docs", "example.png"));
+
+        final List<String> log = Files.readAllLines(result.getMavenLog().getStdout());
+        assertThat(log).anySatisfy(line -> assertThat(line).contains("Using PlantUML version"));
+        assertThat(Files.walk(outputDirectory)).contains(outputFile);
+    }
 }

@@ -38,8 +38,6 @@ public class ServiceLoaderPlantUmlFactory implements PlantUmlFactory {
     /**
      * {@inheritDoc}.
      *
-     * <br />
-     *
      * <strong>Implementation note</strong>: This implementation selects the first implementation returned by the
      * {@link ServiceLoader} mechanism. If that mechanism finds more than one implementation, this method will log a
      * warning for each additional implementation.

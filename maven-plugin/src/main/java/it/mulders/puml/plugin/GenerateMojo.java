@@ -74,7 +74,7 @@ public class GenerateMojo extends AbstractMojo {
     /**
      * Specifies a directory to strip from each file in {@link #sourceFiles} before building the output file name.
      */
-    @Parameter(required = true, property = "plantuml.stripPath", defaultValue = "plantuml")
+    @Parameter(required = true, property = "plantuml.stripPath")
     private File stripPath;
 
     /**

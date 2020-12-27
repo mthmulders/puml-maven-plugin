@@ -32,6 +32,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -70,7 +71,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
                 .map(outputPath -> ensureOutputDirectoryExists(outputPath.getParent()))
                 // Filter items where the output directory could not be created
                 .filter(Optional::isPresent)
-                // Get the first one
+                // Get the first failure
                 .map(Optional::get)
                 .findAny()
                 // ... otherwise, start processing files.
@@ -81,6 +82,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
                 );
     }
 
+    // Visible for testing
     Path computeOutputPath(final Path inputPath, final Path outputDirectory, final PlantUmlOptions options) {
         final Path workingDirectory = Paths.get("").toAbsolutePath();
         final Path stripPath = options.getStripPath();
@@ -92,17 +94,12 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         return outputPath;
     }
 
-    private Optional<PlantUmlOutput> ensureOutputDirectoryExists(final Path outputDirectory) {
+    // Visible for testing
+    Optional<PlantUmlOutput> ensureOutputDirectoryExists(final Path outputDirectory) {
         try {
-            if (Files.exists(outputDirectory) && Files.isDirectory(outputDirectory)) {
-                return Optional.empty();
-            }
-
-            if (Files.exists(outputDirectory) && !Files.isDirectory(outputDirectory)) {
-                return Optional.of(new Failure("Specified output directory exists but is a file, not a directory"));
-            }
-
             Files.createDirectories(outputDirectory);
+        } catch (FileAlreadyExistsException faee) {
+            return Optional.of(new Failure("Specified output directory exists but is a file, not a directory"));
         } catch (IOException e) {
             return Optional.of(new Failure(e));
         }

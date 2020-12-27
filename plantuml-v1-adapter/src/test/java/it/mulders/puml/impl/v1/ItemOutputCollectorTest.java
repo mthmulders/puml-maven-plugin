@@ -69,5 +69,6 @@ class ItemOutputCollectorTest implements WithAssertions {
         // Assert
         assertThat(output.isFailure()).isTrue();
         assertThat(((PlantUmlOutput.Failure) output).getMessage()).contains("wrong.puml");
+        assertThat(((PlantUmlOutput.Failure) output).getMessage()).doesNotContain("good.puml");
     }
 }

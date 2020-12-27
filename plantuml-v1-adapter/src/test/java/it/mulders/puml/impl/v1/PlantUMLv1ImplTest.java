@@ -22,8 +22,10 @@ import it.mulders.puml.api.PlantUmlOutput;
 import it.mulders.puml.api.PlantUmlOutput.Failure;
 import net.sourceforge.plantuml.FileFormatOption;
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,6 +36,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -110,7 +113,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
     }
 
     @Test
-    void should_create_output_directory(@TempDir final Path tempDir) {
+    void should_create_output_directories_and_file(@TempDir final Path tempDir) {
         // Arrange
         // An @TempDir-annotated param is created automatically, so we use a subdirectory which is not created.
         final Path outputDirectory = tempDir.resolve(Paths.get("puml"));
@@ -126,6 +129,9 @@ class PlantUMLv1ImplTest implements WithAssertions {
         assertThat(outputDirectory)
                 .isDirectory()
                 .exists();
+        assertThat(outputDirectory.resolve(Paths.get("existing.svg")))
+                .isRegularFile()
+                .exists();
     }
 
     @Test
@@ -136,6 +142,25 @@ class PlantUMLv1ImplTest implements WithAssertions {
         final PlantUmlInput input = PlantUmlInput.builder()
                 .filesForProcessing(singletonList(Paths.get("non-existing.puml")))
                 .outputDirectory(outputDirectory)
+                .build();
+
+        // Act
+        final PlantUmlOutput result = impl.process(input, OPTIONS);
+
+        // Assert
+        assertThat(result.isFailure()).isTrue();
+        final Failure failure = (Failure) result;
+        assertThat(failure.getMessage()).contains("non-existing.puml");
+    }
+
+    @Test
+    void should_fail_when_output_directory_not_created(@TempDir final Path tempDir) {
+        // Arrange
+        // An @TempDir-annotated param is created automatically, so we use a subdirectory which is not created.
+        final Path outputDirectory = tempDir.resolve(Paths.get("puml"));
+        final PlantUmlInput input = PlantUmlInput.builder()
+                .filesForProcessing(singletonList(Paths.get("non-existing.puml")))
+                .outputDirectory(tempDir)
                 .build();
 
         // Act
@@ -175,20 +200,73 @@ class PlantUMLv1ImplTest implements WithAssertions {
         assertThat(output.toString()).startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg");
     }
 
-    @Test
-    void computeOutputPath_should_strip_paths() {
-        // Arrange
-        final Path inputFile = Paths.get("src", "test", "resources", "example", "input.puml");
-        final Path outputDirectory = Paths.get("target");
-        final PlantUmlOptions options = PlantUmlOptions.builder()
-                .format(PlantUmlOptions.Format.SVG)
-                .stripPath(Paths.get("src", "test", "resources"))
-                .build();
+    @DisplayName("computeOutputPath")
+    @Nested
+    class ComputeOutputPath {
+        @Test
+        void should_strip_paths() {
+            // Arrange
+            final Path inputFile = Paths.get("src", "test", "resources", "example", "input.puml");
+            final Path outputDirectory = Paths.get("target");
+            final PlantUmlOptions options = PlantUmlOptions.builder()
+                    .format(PlantUmlOptions.Format.SVG)
+                    .stripPath(Paths.get("src", "test", "resources"))
+                    .build();
 
-        // Act
-        final Path result = impl.computeOutputPath( inputFile, outputDirectory, options );
+            // Act
+            final Path result = impl.computeOutputPath( inputFile, outputDirectory, options );
 
-        // Assert
-        assertThat(result).isEqualTo(Paths.get("target", "example", "input.svg"));
+            // Assert
+            assertThat(result).isEqualTo(Paths.get("target", "example", "input.svg"));
+        }
+    }
+
+    @DisplayName("ensureOutputDirectoryExists")
+    @Nested
+    class EnsureOutputDirectoryExists {
+        @Test
+        void existing_directory(@TempDir final Path tempDir) {
+            // Arrange
+
+            // Act
+            final Optional<PlantUmlOutput> output = impl.ensureOutputDirectoryExists(tempDir);
+
+            // Assert
+            assertThat(output).isNotPresent();
+            assertThat(tempDir).exists();
+            assertThat(tempDir).isDirectory();
+        }
+
+        @Test
+        void fails_on_existing_file(@TempDir final Path tempDir) throws IOException {
+            // Arrange
+            // An @TempDir-annotated param is created automatically, so we use a subdirectory which is not created.
+            final Path outputDirectoryThatIsFile = tempDir.resolve(Paths.get("puml"));
+            Files.createFile(outputDirectoryThatIsFile);
+
+            // Act
+            final Optional<PlantUmlOutput> output = impl.ensureOutputDirectoryExists(outputDirectoryThatIsFile);
+
+            // Assert
+            assertThat(output).isPresent()
+                    .hasValueSatisfying(result -> assertThat(result).isInstanceOf(Failure.class));
+            assertThat(outputDirectoryThatIsFile).exists();
+            assertThat(outputDirectoryThatIsFile).isRegularFile();
+        }
+
+        @Test
+        void non_existing_directory(@TempDir final Path tempDir) {
+            // Arrange
+            // An @TempDir-annotated param is created automatically, so we use a subdirectory which is not created.
+            final Path outputDirectory = tempDir.resolve(Paths.get("puml"));
+
+            // Act
+            final Optional<PlantUmlOutput> output = impl.ensureOutputDirectoryExists(outputDirectory);
+
+            // Assert
+            assertThat(output).isNotPresent();
+            assertThat(outputDirectory).exists();
+            assertThat(outputDirectory).isDirectory();
+        }
     }
 }

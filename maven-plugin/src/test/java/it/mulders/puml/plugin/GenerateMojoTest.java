@@ -144,4 +144,19 @@ class GenerateMojoTest implements WithAssertions {
         // Assert
         verify(plantUml, never()).process(any(), any());
     }
+
+    @Test
+    void should_not_invoke_PlantUML_when_outputFormat_is_invalid() throws MojoExecutionException {
+        // Arrange
+        final FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get(".")).build();
+        mojo.setSourceFiles(fileSet);
+        mojo.setOutputDirectory(new File("target"));
+        mojo.setFormat("foo");
+
+        // Act
+        mojo.execute();
+
+        // Assert
+        verify(plantUml, never()).process(any(), any());
+    }
 }

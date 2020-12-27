@@ -39,6 +39,27 @@ class PlantUmlOptionsTest implements WithAssertions {
         assertThat(result.toString()).endsWith(format.getExtension());
     }
 
+    @EnumSource(Format.class)
+    @ParameterizedTest
+    void from_extension(final Format format) {
+        // Act
+        assertThat(Format.fromExtension(format.getExtension()))
+                .isPresent()
+                .hasValue(format);
+        assertThat(Format.fromExtension(format.getExtension().toLowerCase()))
+                .isPresent()
+                .hasValue(format);
+        assertThat(Format.fromExtension(format.getExtension().toUpperCase()))
+                .isPresent()
+                .hasValue(format);
+    }
+
+    @Test
+    void from_unknown_extension() {
+        assertThat(Format.fromExtension("bin"))
+                .isNotPresent();
+    }
+
     private static final Format format = Format.SVG;
     private static final Path stripPath = Paths.get("src/main/docs");
 

@@ -48,6 +48,8 @@ import static java.util.stream.Collectors.toMap;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
 public class PlantUMLv1Impl implements PlantUmlFacade {
+    private static final String HEADLESS = "java.awt.headless";
+
     private final OutputDirector outputDirector;
 
     public PlantUMLv1Impl() {
@@ -117,7 +119,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         final ItemOutput.ItemOutputBuilder result = ItemOutput.builder();
         final SourceStringReader reader = new SourceStringReader(input);
 
-        final String headless = System.getProperty("java.awt.headless");
+        final String headless = System.getProperty(HEADLESS);
 
         try {
             System.setProperty("java.awt.headless", "true");
@@ -125,7 +127,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         } finally {
             // Restore old value
             if (headless != null) {
-                System.setProperty("java.awt.headless", headless);
+                System.setProperty(HEADLESS, headless);
             }
         }
 

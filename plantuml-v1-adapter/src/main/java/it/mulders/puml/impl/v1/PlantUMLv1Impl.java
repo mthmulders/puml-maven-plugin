@@ -117,7 +117,17 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         final ItemOutput.ItemOutputBuilder result = ItemOutput.builder();
         final SourceStringReader reader = new SourceStringReader(input);
 
-        reader.outputImage(output, fileFormatOption(options));
+        final String headless = System.getProperty("java.awt.headless");
+
+        try {
+            System.setProperty("java.awt.headless", "true");
+            reader.outputImage( output, fileFormatOption( options ) );
+        } finally {
+            // Restore old value
+            if (headless != null) {
+                System.setProperty("java.awt.headless", headless);
+            }
+        }
 
         return result.success(true).build();
     }

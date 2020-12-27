@@ -17,7 +17,6 @@ package it.mulders.puml.impl.v1;
  */
 
 import it.mulders.puml.api.PlantUmlOptions;
-import it.mulders.puml.api.PlantUmlOutput;
 import it.mulders.puml.api.PlantUmlOutput.Failure;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.DisplayName;
@@ -72,8 +71,7 @@ class OutputDirectorTest implements WithAssertions {
         }
 
         @Test
-        void fails_on_existing_file(@TempDir final Path tempDir) throws IOException
-        {
+        void fails_on_existing_file(@TempDir final Path tempDir) throws IOException {
             // Arrange
             // An @TempDir-annotated param is created automatically, so we use a subdirectory which is not created.
             final Path outputDirectoryThatIsFile = tempDir.resolve(Paths.get("puml"));

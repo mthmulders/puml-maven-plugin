@@ -103,7 +103,7 @@ You can configure the goal using these parameters:
 | Property | `plantuml.format` | 
 | Required? | yes |
 | Default value | - |
-| Values | `PNG`, SVG` |
+| Values | `PNG`, `SVG` |
 
 
 ## Path stripping

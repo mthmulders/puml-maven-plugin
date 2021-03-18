@@ -33,7 +33,7 @@ import java.util.Optional;
 class OutputDirectorTest implements WithAssertions {
     private final OutputDirector director = new OutputDirector();
 
-    @DisplayName( "computeOutputPath")
+    @DisplayName("computeOutputPath")
     @Nested
     class ComputeOutputPath {
         @Test
@@ -47,10 +47,27 @@ class OutputDirectorTest implements WithAssertions {
                     .build();
 
             // Act
-            final Path result = director.computeOutputPath( inputFile, outputDirectory, options );
+            final Path result = director.computeOutputPath(inputFile, outputDirectory, options);
 
             // Assert
             assertThat(result).isEqualTo(Paths.get("target", "example", "input.svg"));
+        }
+
+        @Test
+        void should_work_with_all_extensions() {
+            // Arrange
+            final Path inputFile = Paths.get("target", "generated-docs", "class-diagram.plantuml");
+            final Path outputDirectory = Paths.get("target", "site");
+            final PlantUmlOptions options = PlantUmlOptions.builder()
+                    .format(PlantUmlOptions.Format.PNG)
+                    .stripPath(Paths.get("target", "generated-docs"))
+                    .build();
+
+            // Act
+            final Path result = director.computeOutputPath(inputFile, outputDirectory, options);
+
+            // Assert
+            assertThat(result).isEqualTo(Paths.get("target", "site", "class-diagram.png"));
         }
     }
 

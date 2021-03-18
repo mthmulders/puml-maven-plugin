@@ -40,7 +40,9 @@ public class PlantUmlOptions {
         private final String extension;
 
         public Path convertFilename(final Path input) {
-            final String filename = input.toString().replaceAll("puml$", extension);
+            final int lastDot = input.toString().lastIndexOf('.');
+            final String baseName = input.toString().substring(0, lastDot);
+            final String filename = String.format("%s.%s", baseName, extension);
             return Paths.get(filename);
         }
 

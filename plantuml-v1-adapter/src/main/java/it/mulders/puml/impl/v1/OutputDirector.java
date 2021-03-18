@@ -57,7 +57,7 @@ public class OutputDirector {
         final Path relativeOutputPath = options.getFormat().convertFilename(relativeInputPath);
 
         final Path outputPath = outputDirectory.resolve(relativeOutputPath);
-        log.debug("Computed output path {} for input {}", outputPath, inputPath);
+        log.info("Computed output path {} for input {}", outputPath, inputPath);
         return outputPath;
     }
 

@@ -128,3 +128,12 @@ This gives you the flexibility to specify the exact version of PlantUML you want
 Releases must be built with Java 8 and Maven 3.x (_not_ 4.x at the time of writing).
 This is due to Maven 4's build/consumer, where the distributed POM is different from the one on disk.
 The Maven GPG Plugin isn't aware of this yet and signs the wrong POM...
+
+## Contributing
+Do you have an idea for this plugin, or want to report a bug?
+All contributions are welcome!
+Feel free to [file an issue](https://github.com/mthmulders/puml-maven-plugin/issues/new) with your idea, question or whatever it is you want to contribute.
+
+## License
+The PUML Maven Plugin is licensed under the Apache License, version 2.
+See [**LICENSE**](./LICENSE) for the full text of the license.

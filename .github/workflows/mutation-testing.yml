@@ -39,6 +39,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 8
+          distribution: 'adopt'
+          check-latest: true
 
       - name: Run Pitest
         run: mvn test-compile org.pitest:pitest-maven:mutationCoverage

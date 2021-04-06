@@ -36,6 +36,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: ${{ matrix.java }}
+          distribution: 'adopt'
+          check-latest: true
 
       - name: Set up cache for ~./m2/repository
         uses: actions/cache@v2.1.4

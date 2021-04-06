@@ -39,6 +39,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
+          distribution: 'adopt'
+          check-latest: true
 
       - name: SonarCloud Scan
         run: mvn -P sonarcloud -Dsonar.login=$SONAR_TOKEN verify sonar:sonar

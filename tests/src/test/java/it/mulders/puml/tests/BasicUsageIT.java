@@ -36,7 +36,7 @@ public class BasicUsageIT {
     void should_generate_svg_diagram(final MavenExecutionResult result) throws IOException {
         assertThat(result).isSuccessful();
 
-        final Path baseDir = Paths.get(result.getMavenProjectResult().getBaseDir().toURI());
+        final Path baseDir = Paths.get(result.getMavenProjectResult().getTargetProjectDirectory().toURI());
         final Path outputDirectory = baseDir.resolve(Paths.get("target", "plantuml"));
         assertThat(outputDirectory)
                 .exists()
@@ -54,7 +54,7 @@ public class BasicUsageIT {
     void should_generate_png_diagram(final MavenExecutionResult result) throws IOException {
         assertThat(result).isSuccessful();
 
-        final Path baseDir = Paths.get(result.getMavenProjectResult().getBaseDir().toURI());
+        final Path baseDir = Paths.get(result.getMavenProjectResult().getTargetProjectDirectory().toURI());
         final Path outputDirectory = baseDir.resolve(Paths.get("target", "plantuml"));
         assertThat(outputDirectory)
                 .exists()

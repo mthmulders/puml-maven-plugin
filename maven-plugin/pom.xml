@@ -23,7 +23,7 @@
     </parent>
 
     <properties>
-        <maven-plugin-tools.version>3.6.1</maven-plugin-tools.version>
+        <maven-plugin-tools.version>3.6.4</maven-plugin-tools.version>
     </properties>
 
     <artifactId>plantuml-maven-plugin</artifactId>

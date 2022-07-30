@@ -38,14 +38,11 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: 8
+          java-version: 11
           distribution: 'adopt'
           check-latest: true
 
       - name: Run Pitest
-        run: mvn test-compile org.pitest:pitest-maven:mutationCoverage
-
-      - name: Upload mutation test report
-        run: ./.github/upload-mutation-report.sh
+        run: mvn -e test-compile org.pitest:pitest-maven:mutationCoverage
         env:
-          API_KEY: ${{ secrets.STRYKER_DASHBOARD_TOKEN }}
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_TOKEN }}

@@ -138,9 +138,9 @@
                             <version>1.0.0</version>
                         </dependency>
                         <dependency>
-                            <groupId>io.github.wmaarts</groupId>
-                            <artifactId>pitest-mutation-testing-elements-plugin</artifactId>
-                            <version>0.4.0</version>
+                            <groupId>it.mulders.stryker</groupId>
+                            <artifactId>pit-dashboard-reporter</artifactId>
+                            <version>0.1.2</version>
                         </dependency>
                     </dependencies>
                     <configuration>
@@ -151,9 +151,11 @@
                             <excludedClass>*Builder</excludedClass>
                         </excludedClasses>
                         <outputFormats>
-                            <format>HTML2</format>
+                            <format>stryker-dashboard</format>
                         </outputFormats>
-                        <timestampedReports>false</timestampedReports>
+                        <pluginConfiguration>
+                            <stryker.moduleName>${project.artifactId}</stryker.moduleName>
+                        </pluginConfiguration>
                     </configuration>
                 </plugin>
                 <plugin>

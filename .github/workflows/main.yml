@@ -48,4 +48,4 @@ jobs:
             puml
 
       - name: Build and test code
-        run: mvn verify
+        run: mvn verify -B --no-transfer-progress

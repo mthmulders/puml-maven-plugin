@@ -43,6 +43,6 @@ jobs:
           check-latest: true
 
       - name: Run Pitest
-        run: mvn -e test-compile org.pitest:pitest-maven:mutationCoverage
+        run: mvn -e -B --no-transfer-progress test-compile org.pitest:pitest-maven:mutationCoverage
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_TOKEN }}

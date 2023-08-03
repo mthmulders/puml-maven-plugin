@@ -200,6 +200,9 @@ class PlantUMLv1ImplTest implements WithAssertions {
         impl.processDiagram(input, output, OPTIONS);
 
         // Assert
-        assertThat(output.toString()).startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><svg");
+        assertThat(output.toString())
+                .startsWith("<?xml version=\"1.0\" encoding=\"")
+                .contains("<svg xmlns=\"http://www.w3.org/2000/svg\"")
+                .endsWith("</svg>");
     }
 }

@@ -245,17 +245,17 @@
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
+                <configuration combine.children="append">
+                    <excludes>
+                        <exclude>.mvn/.gitkeep</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>rat-check</id>
                         <goals>
                             <goal>check</goal>
                         </goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>.mvn/.gitkeep</exclude>
-                            </excludes>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

@@ -251,6 +251,11 @@
                         <goals>
                             <goal>check</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>.mvn/.gitkeep</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

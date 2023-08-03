@@ -130,17 +130,17 @@
                 <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
-                    <version>1.9.3</version>
+                    <version>1.14.2</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.pitest</groupId>
                             <artifactId>pitest-junit5-plugin</artifactId>
-                            <version>1.0.0</version>
+                            <version>1.2.0</version>
                         </dependency>
                         <dependency>
                             <groupId>it.mulders.stryker</groupId>
                             <artifactId>pit-dashboard-reporter</artifactId>
-                            <version>0.1.2</version>
+                            <version>0.2.1</version>
                         </dependency>
                     </dependencies>
                     <configuration>

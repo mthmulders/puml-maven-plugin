@@ -36,7 +36,7 @@ public class Issue23IT {
     void should_generate_png_file(final MavenExecutionResult result) throws IOException {
         assertThat(result).isSuccessful();
 
-        final Path baseDir = Paths.get(result.getMavenProjectResult().getTargetProjectDirectory().toURI());
+        final Path baseDir = result.getMavenProjectResult().getTargetProjectDirectory();
         final Path outputDirectory = baseDir.resolve(Paths.get("target", "site"));
         Assertions.assertThat(outputDirectory)
                 .exists()

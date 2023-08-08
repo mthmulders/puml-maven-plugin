@@ -26,4 +26,5 @@ updates:
     time: "04:00"
   open-pull-requests-limit: 10
   ignore:
+    # Manually upgrading this one
     - dependency-name: "org.apache.maven:maven-plugin-api"

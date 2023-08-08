@@ -16,29 +16,28 @@ package it.mulders.puml.plugin;
  * limitations under the License.
  */
 
+import com.github.valfirst.slf4jtest.LoggingEvent;
+import com.github.valfirst.slf4jtest.TestLogger;
+import com.github.valfirst.slf4jtest.TestLoggerFactory;
+import com.github.valfirst.slf4jtest.TestLoggerFactoryExtension;
 import it.mulders.puml.api.PlantUmlFacade;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import uk.org.lidalia.slf4jext.Level;
-import uk.org.lidalia.slf4jtest.LoggingEvent;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.event.Level;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
 
-@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@ExtendWith(TestLoggerFactoryExtension.class)
 class ServiceLoaderPlantUmlFactoryTest implements WithAssertions {
+    private final TestLogger logger = TestLoggerFactory.getTestLogger(ServiceLoaderPlantUmlFactory.class);
     private final ServiceLoaderPlantUmlFactory factory = new ServiceLoaderPlantUmlFactory();
-
-    @BeforeEach
-    void clear_logging() {
-        TestLoggerFactory.clear();
-    }
 
     @Test
     void should_locate_PlantUML_implementation() {
@@ -58,7 +57,7 @@ class ServiceLoaderPlantUmlFactoryTest implements WithAssertions {
     void should_warn_when_more_than_one_implementation_found() {
         Iterator<PlantUmlFacade> implementations = Arrays.asList(impl1, impl2).iterator();
         factory.findSuitableImplementation(implementations);
-        long warningCount = TestLoggerFactory.getLoggingEvents().stream()
+        long warningCount = logger.getLoggingEvents().stream()
                 .filter(e -> e.getLevel() == Level.WARN)
                 .count();
         assertThat(warningCount).isEqualTo(3);
@@ -75,7 +74,7 @@ class ServiceLoaderPlantUmlFactoryTest implements WithAssertions {
     void should_log_location_of_alternative_implementation() {
         Iterator<PlantUmlFacade> implementations = Arrays.asList(impl1, impl2).iterator();
         factory.findSuitableImplementation(implementations);
-        Optional<LoggingEvent> result = TestLoggerFactory.getLoggingEvents().stream()
+        Optional<LoggingEvent> result = logger.getLoggingEvents().stream()
                 .filter(e -> e.getMessage().contains("adapter found in"))
                 .findFirst();
         assertThat(result).isPresent().hasValueSatisfying(event ->

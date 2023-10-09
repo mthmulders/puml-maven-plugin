@@ -32,3 +32,6 @@ updates:
     - dependency-name: "ch.qos.logback:logback-classic"
       versions:
       - ">=1.4.x"
+    - dependency-name: "org.mockito:mockito-core"
+      versions:
+      - ">=5.0.0"

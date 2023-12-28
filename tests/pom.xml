@@ -27,7 +27,7 @@
     <description>Integration tests for the PlantUML Maven Plugin</description>
 
     <properties>
-        <itf.version>0.12.0</itf.version>
+        <itf.version>0.13.0</itf.version>
     </properties>
 
     <dependencies>

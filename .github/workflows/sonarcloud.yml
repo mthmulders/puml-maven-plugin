@@ -36,7 +36,7 @@ jobs:
           key: puml-${{ hashFiles('**/pom.xml') }}
 
       - name: Set up JDK
-        uses: actions/setup-java@v4.0.0
+        uses: actions/setup-java@v4.1.0
         with:
           java-version: 17
           distribution: 'adopt'

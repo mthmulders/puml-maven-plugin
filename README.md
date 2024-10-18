@@ -26,6 +26,12 @@
 [![Maven Central](https://img.shields.io/maven-central/v/it.mulders.puml/plantuml-maven-plugin.svg?color=brightgreen&label=Maven%20Central)](https://search.maven.org/artifact/it.mulders.puml/plantuml-maven-plugin)
 [![](https://img.shields.io/github/license/mthmulders/puml-maven-plugin.svg)](./LICENSE)
 
+## Requirements
+Initially, this plugin required your build to run on Java 8 or higher.
+
+Starting with version 0.3, your build should run on Java 11 or higher.
+Note that this does not mean your code has to be Java 11 or higher; you can always use a [Maven Toolchain](https://maarten.mulders.it/2021/03/introduction-to-maven-toolchains/) if you're building Java 8 or earlier.
+
 ## Usage
 Add the plugin to your POM.
 

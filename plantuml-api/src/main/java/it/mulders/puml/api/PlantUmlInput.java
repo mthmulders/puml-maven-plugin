@@ -16,18 +16,11 @@ package it.mulders.puml.api;
  * limitations under the License.
  */
 
-import lombok.Builder;
-import lombok.Getter;
-
 import java.nio.file.Path;
 import java.util.Collection;
 
 /**
  * Specifies the input that PlantUML should process.
  */
-@Builder
-@Getter
-public class PlantUmlInput {
-    private final Collection<Path> filesForProcessing;
-    private final Path outputDirectory;
+public record PlantUmlInput(Collection<Path> filesForProcessing, Path outputDirectory) {
 }

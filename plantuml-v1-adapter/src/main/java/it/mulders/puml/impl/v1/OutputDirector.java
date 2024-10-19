@@ -18,7 +18,8 @@ package it.mulders.puml.impl.v1;
 
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -30,8 +31,9 @@ import java.util.Optional;
 /**
  * Class for working with output directories and folders.
  */
-@Slf4j
 public class OutputDirector {
+    private static final Logger log = LoggerFactory.getLogger(OutputDirector.class);
+
     /**
      * Ensures a folder for placing the generated diagrams exists.
      * @param outputDirectory The desired folder.
@@ -52,9 +54,9 @@ public class OutputDirector {
     // Visible for testing
     public Path computeOutputPath(final Path inputPath, final Path outputDirectory, final PlantUmlOptions options) {
         final Path workingDirectory = Paths.get("").toAbsolutePath();
-        final Path stripPath = options.getStripPath();
+        final Path stripPath = options.stripPath();
         final Path relativeInputPath = workingDirectory.resolve(stripPath).relativize(inputPath.toAbsolutePath());
-        final Path relativeOutputPath = options.getFormat().convertFilename(relativeInputPath);
+        final Path relativeOutputPath = options.format().convertFilename(relativeInputPath);
 
         final Path outputPath = outputDirectory.resolve(relativeOutputPath);
         log.info("Computed output path {} for input {}", outputPath, inputPath);

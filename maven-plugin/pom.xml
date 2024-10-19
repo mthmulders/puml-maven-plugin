@@ -30,14 +30,14 @@
     <packaging>maven-plugin</packaging>
     <name>PlantUML Maven Plugin :: Maven Plugin</name>
 
+    <prerequisites>
+        <maven>3.9.6</maven>
+    </prerequisites>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
         <dependency>
             <groupId>it.mulders.puml</groupId>
@@ -102,9 +102,9 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-plugin-plugin</artifactId>
-				<version>${maven-plugin-tools.version}</version>
-			</plugin>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>${maven-plugin-tools.version}</version>
+              </plugin>
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>

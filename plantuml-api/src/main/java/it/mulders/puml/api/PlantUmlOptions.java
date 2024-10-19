@@ -16,10 +16,6 @@ package it.mulders.puml.api;
  * limitations under the License.
  */
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -28,16 +24,17 @@ import java.util.Optional;
 /**
  * Options to pass to PlantUML.
  */
-@Builder
-@Getter
-public class PlantUmlOptions {
-    @AllArgsConstructor
-    @Getter
+public record PlantUmlOptions(Format format, Path stripPath) {
+
     public enum Format {
         PNG("png"),
         SVG("svg");
 
-        private final String extension;
+        public final String extension;
+
+        Format(String extension) {
+            this.extension = extension;
+        }
 
         public Path convertFilename(final Path input) {
             final int lastDot = input.toString().lastIndexOf('.');
@@ -48,11 +45,8 @@ public class PlantUmlOptions {
 
         public static Optional<Format> fromExtension(final String input) {
             return Arrays.stream(Format.values())
-                    .filter(f -> f.getExtension().equalsIgnoreCase(input))
+                    .filter(f -> f.extension.equalsIgnoreCase(input))
                     .findAny();
         }
     }
-
-    private final Format format;
-    private final Path stripPath;
 }

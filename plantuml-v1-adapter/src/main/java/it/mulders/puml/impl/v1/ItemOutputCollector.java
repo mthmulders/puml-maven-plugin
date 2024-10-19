@@ -20,6 +20,7 @@ import it.mulders.puml.api.PlantUmlOutput;
 import it.mulders.puml.api.PlantUmlOutput.Failure;
 import it.mulders.puml.api.PlantUmlOutput.Success;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +31,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
+import static java.util.function.Predicate.not;
 
 /**
  * Aggregates the PlantUML output of each processed file and converts that into one {@link PlantUmlOutput} value.
@@ -58,14 +61,14 @@ public class ItemOutputCollector implements Collector<ItemOutput, List<ItemOutpu
     @Override
     public Function<List<ItemOutput>, PlantUmlOutput> finisher() {
         return (outputs) -> {
-            if (outputs.stream().allMatch(ItemOutput::isSuccess)) {
+            if (outputs.stream().allMatch(ItemOutput::success)) {
                 return new Success(outputs.size());
             }
 
             final String failedItems = outputs.stream()
-                    .filter(item -> !item.isSuccess())
-                    .map(item -> item.getInput())
-                    .map(path -> path.toString())
+                    .filter(not(ItemOutput::success))
+                    .map(ItemOutput::input)
+                    .map(Path::toString)
                     .collect(Collectors.joining(System.lineSeparator()));
 
             return new Failure("One or more diagrams could not be generated. Failed items: " + failedItems);

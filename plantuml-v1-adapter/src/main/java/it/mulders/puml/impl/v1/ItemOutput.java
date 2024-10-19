@@ -16,14 +16,29 @@ package it.mulders.puml.impl.v1;
  * limitations under the License.
  */
 
-import lombok.Builder;
-import lombok.Getter;
-
 import java.nio.file.Path;
 
-@Builder
-@Getter
-public class ItemOutput {
-    private final Path input;
-    private final boolean success;
+public record ItemOutput(Path input, boolean success) {
+    public static ItemOutputBuilder builder() {
+        return new ItemOutputBuilder();
+    }
+
+    static class ItemOutputBuilder {
+        private Path input;
+        boolean success;
+
+        public ItemOutputBuilder input(Path input) {
+            this.input = input;
+            return this;
+        }
+
+        public ItemOutputBuilder success(boolean success) {
+            this.success = success;
+            return this;
+        }
+
+        public ItemOutput build() {
+            return new ItemOutput(input, success);
+        }
+    }
 }

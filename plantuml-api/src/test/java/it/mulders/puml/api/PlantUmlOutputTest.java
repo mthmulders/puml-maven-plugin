@@ -42,12 +42,12 @@ class PlantUmlOutputTest implements WithAssertions {
 
         @Test
         void getMessage() {
-            assertThat(result.getMessage()).isEqualTo("Error occurred");
+            assertThat(result.message()).isEqualTo("Error occurred");
         }
 
         @Test
         void getMessage_from_exception() {
-            assertThat(new Failure(new IllegalArgumentException("Wrong argument")).getMessage()).isEqualTo("Wrong argument");
+            assertThat(new Failure(new IllegalArgumentException("Wrong argument")).message()).isEqualTo("Wrong argument");
         }
     }
 
@@ -66,7 +66,7 @@ class PlantUmlOutputTest implements WithAssertions {
 
         @Test
         void getProcessedCount() {
-            assertThat(result.getProcessedCount()).isEqualTo(1);
+            assertThat(result.processedCount()).isEqualTo(1);
         }
     }
 }

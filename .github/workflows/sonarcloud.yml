@@ -42,8 +42,14 @@ jobs:
           distribution: 'adopt'
           check-latest: true
 
+      - name: Download Apache Maven 3.9.6
+        run: |
+          pushd ~
+          curl -LOJ https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+          tar -xzf apache-maven-3.9.6-bin.tar.gz
+
       - name: SonarCloud Scan
-        run: mvn -B --no-transfer-progress -P sonarcloud -Dsonar.login=$SONAR_TOKEN verify sonar:sonar
+        run: ~/apache-maven-3.9.6/bin/mvn -B --no-transfer-progress -P sonarcloud -Dsonar.login=$SONAR_TOKEN verify sonar:sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

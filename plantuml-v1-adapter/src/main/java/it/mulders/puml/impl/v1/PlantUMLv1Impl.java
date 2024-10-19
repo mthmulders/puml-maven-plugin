@@ -21,13 +21,12 @@ import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
 import it.mulders.puml.api.PlantUmlOutput.Success;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.version.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -45,9 +44,8 @@ import static java.util.stream.Collectors.toMap;
 /**
  * Implementation of the {@link PlantUmlFacade} based on PlantUML v1.x.y.
  */
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-@Slf4j
 public class PlantUMLv1Impl implements PlantUmlFacade {
+    private static final Logger log = LoggerFactory.getLogger(PlantUMLv1Impl.class);
     private static final String HEADLESS = "java.awt.headless";
 
     private final OutputDirector outputDirector;
@@ -56,12 +54,16 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         this(new OutputDirector());
     }
 
+    PlantUMLv1Impl(final OutputDirector outputDirector) {
+        this.outputDirector = outputDirector;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public PlantUmlOutput process(final PlantUmlInput input, final PlantUmlOptions options) {
-        final Collection<Path> filesForProcessing = input.getFilesForProcessing();
+        final Collection<Path> filesForProcessing = input.filesForProcessing();
 
         if (filesForProcessing == null || filesForProcessing.isEmpty()) {
             log.info("No input files to process");
@@ -70,7 +72,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
 
         log.info("Using PlantUML version {}", Version.versionString());
 
-        final Path outputDirectory = input.getOutputDirectory();
+        final Path outputDirectory = input.outputDirectory();
         final Map<Path, Path> inputToOutputMapping = filesForProcessing.stream()
                 .collect(toMap(identity(), path -> outputDirector.computeOutputPath( path, outputDirectory, options)));
 
@@ -98,10 +100,10 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         final String input;
 
         try {
-            log.debug("Reading input from {}", inputPath.toString());
+            log.debug("Reading input from {}", inputPath);
             input = new String(Files.readAllBytes(inputPath));
         } catch (IOException e) {
-            log.error("Could not read input file {}", inputPath.toString(), e);
+            log.error("Could not read input file {}", inputPath, e);
             return result.success(false).build();
         }
 
@@ -110,7 +112,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
             log.debug("Processing diagram");
             return processDiagram(input, bos, options);
         } catch (IOException e) {
-            log.error( "Could not write to output file {}", outputPath.toString(), e);
+            log.error( "Could not write to output file {}", outputPath, e);
             return result.success(false).build();
         }
     }
@@ -135,14 +137,9 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
     }
 
     FileFormatOption fileFormatOption(final PlantUmlOptions options) {
-        switch (options.getFormat()) {
-            case PNG:
-                return new FileFormatOption(FileFormat.PNG, false);
-            case SVG:
-                return new FileFormatOption(FileFormat.SVG, false);
-            default:
-                log.error("This adapter does not support format {}", options.getFormat());
-                throw new IllegalArgumentException("Format " + options.getFormat() + " not supported");
-        }
+        return switch (options.format()) {
+            case PNG -> new FileFormatOption(FileFormat.PNG, false);
+            case SVG -> new FileFormatOption(FileFormat.SVG, false);
+        };
     }
 }

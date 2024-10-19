@@ -17,7 +17,8 @@ package it.mulders.puml.plugin;
  */
 
 import it.mulders.puml.api.PlantUmlFacade;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -32,8 +33,8 @@ import java.util.ServiceLoader;
  */
 @Named
 @Singleton
-@Slf4j
 public class ServiceLoaderPlantUmlFactory implements PlantUmlFactory {
+    private static final Logger log = LoggerFactory.getLogger(ServiceLoaderPlantUmlFactory.class);
 
     /**
      * {@inheritDoc}.

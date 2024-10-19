@@ -44,10 +44,7 @@ import static org.mockito.Mockito.when;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PlantUMLv1ImplTest implements WithAssertions {
-    private static final PlantUmlOptions OPTIONS = PlantUmlOptions.builder()
-            .format(PlantUmlOptions.Format.SVG)
-            .stripPath(Paths.get("src", "test", "resources"))
-            .build();
+    private static final PlantUmlOptions OPTIONS = new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"));
     private static final Path EXISTING = Paths.get("src", "test", "resources", "existing.puml");
 
     private final PlantUMLv1Impl impl = new PlantUMLv1Impl();
@@ -55,10 +52,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
     @Test
     void should_return_success_output(@TempDir final Path tempDir) {
         // Arrange
-        final PlantUmlInput input = PlantUmlInput.builder()
-                .filesForProcessing(singletonList(EXISTING))
-                .outputDirectory(tempDir)
-                .build();
+        final PlantUmlInput input = new PlantUmlInput(singletonList(EXISTING), tempDir);
 
         // Act
         final PlantUmlOutput output = impl.process(input, OPTIONS);
@@ -70,10 +64,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
     @Test
     void should_not_fail_with_null_input_files(@TempDir final Path tempDir) {
         // Arrange
-        final PlantUmlInput input = PlantUmlInput.builder()
-                .filesForProcessing(null)
-                .outputDirectory(tempDir)
-                .build();
+        final PlantUmlInput input = new PlantUmlInput(null, tempDir);
 
         // Act
         final PlantUmlOutput output = impl.process(input, OPTIONS);
@@ -85,10 +76,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
     @Test
     void should_not_fail_with_zero_input_files(@TempDir final Path tempDir) {
         // Arrange
-        final PlantUmlInput input = PlantUmlInput.builder()
-                .filesForProcessing(emptyList())
-                .outputDirectory(tempDir)
-                .build();
+        final PlantUmlInput input = new PlantUmlInput(emptyList(), tempDir);
 
         // Act
         final PlantUmlOutput output = impl.process(input, OPTIONS);
@@ -101,10 +89,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
     void should_fail_when_output_directory_is_existing_file(@TempDir final Path tempDir) throws IOException {
         // Arrange
         final Path outputDirectory = Files.createFile(tempDir.resolve(Paths.get("puml")));
-        final PlantUmlInput input = PlantUmlInput.builder()
-                .filesForProcessing(singletonList(EXISTING))
-                .outputDirectory(outputDirectory)
-                .build();
+        final PlantUmlInput input = new PlantUmlInput(singletonList(EXISTING), outputDirectory);
 
         // Act
         final PlantUmlOutput output = impl.process(input, OPTIONS);
@@ -118,10 +103,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
         // Arrange
         // An @TempDir-annotated param is created automatically, so we use a subdirectory which is not created.
         final Path outputDirectory = tempDir.resolve(Paths.get("puml"));
-        final PlantUmlInput input = PlantUmlInput.builder()
-                .filesForProcessing(singletonList(EXISTING))
-                .outputDirectory(outputDirectory)
-                .build();
+        final PlantUmlInput input = new PlantUmlInput(singletonList(EXISTING), outputDirectory);
 
         // Act
         impl.process(input, OPTIONS );
@@ -140,10 +122,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
         // Arrange
         // An @TempDir-annotated param is created automatically, so we use a subdirectory which is not created.
         final Path outputDirectory = tempDir.resolve(Paths.get("puml"));
-        final PlantUmlInput input = PlantUmlInput.builder()
-                .filesForProcessing(singletonList(Paths.get("non-existing.puml")))
-                .outputDirectory(outputDirectory)
-                .build();
+        final PlantUmlInput input = new PlantUmlInput(singletonList(Paths.get("non-existing.puml")), outputDirectory);
 
         // Act
         final PlantUmlOutput result = impl.process(input, OPTIONS);
@@ -151,17 +130,14 @@ class PlantUMLv1ImplTest implements WithAssertions {
         // Assert
         assertThat(result.isFailure()).isTrue();
         final Failure failure = (Failure) result;
-        assertThat(failure.getMessage()).contains("non-existing.puml");
+        assertThat(failure.message()).contains("non-existing.puml");
     }
 
     @Test
     void should_fail_when_output_directory_not_created(@TempDir final Path tempDir) {
         // Arrange
         // An @TempDir-annotated param is created automatically, so we use a subdirectory which is not created.
-        final PlantUmlInput input = PlantUmlInput.builder()
-                .filesForProcessing(singletonList(Paths.get("non-existing.puml")))
-                .outputDirectory(tempDir)
-                .build();
+        final PlantUmlInput input = new PlantUmlInput(singletonList(Paths.get("non-existing.puml")), tempDir);
         final OutputDirector outputDirector = mock(OutputDirector.class);
         when(outputDirector.computeOutputPath(any(), any(), any())).thenReturn(Paths.get("."));
         when(outputDirector.ensureOutputDirectoryExists(any())).thenReturn(Optional.of(new Failure("Alas...")));
@@ -172,14 +148,14 @@ class PlantUMLv1ImplTest implements WithAssertions {
         // Assert
         assertThat(result.isFailure()).isTrue();
         final Failure failure = (Failure) result;
-        assertThat(failure.getMessage()).contains("Alas...");
+        assertThat(failure.message()).contains("Alas...");
     }
 
     @EnumSource(PlantUmlOptions.Format.class)
     @ParameterizedTest
     void fileFormatOption(final PlantUmlOptions.Format format) {
         // Act
-        final FileFormatOption option = impl.fileFormatOption(PlantUmlOptions.builder().format(format).build());
+        final FileFormatOption option = impl.fileFormatOption(new PlantUmlOptions(format, null));
 
         // Assert
         assertThat(option).isNotNull();
@@ -188,12 +164,13 @@ class PlantUMLv1ImplTest implements WithAssertions {
     @Test
     void process_diagram_should_write_diagram_to_output_stream() throws IOException {
         // Arrange
-        final String input
-                = "@startuml\n"
-                + "class PlantUMLv1Impl {\n"
-                + "}\n"
-                + "@enduml\n"
-                ;
+        final String input =
+                """
+                @startuml
+                class PlantUMLv1Impl {
+                }
+                @enduml
+                """;
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         // Act

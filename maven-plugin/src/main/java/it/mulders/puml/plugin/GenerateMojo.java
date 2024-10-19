@@ -21,15 +21,14 @@ import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOptions.Format;
 import it.mulders.puml.api.PlantUmlOutput;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -46,12 +45,17 @@ import static java.util.stream.Collectors.joining;
  */
 @Mojo(name = "generate")
 @Execute
-@RequiredArgsConstructor(onConstructor = @__( { @Inject }))
-@Setter
-@Slf4j
 public class GenerateMojo extends AbstractMojo {
+    private static final Logger log = LoggerFactory.getLogger(GenerateMojo.class);
+
     private final InputFileLocator inputFileLocator;
     private final PlantUmlFactory plantUmlFactory;
+
+    @Inject
+    public GenerateMojo(final InputFileLocator inputFileLocator, final PlantUmlFactory plantUmlFactory) {
+        this.inputFileLocator = inputFileLocator;
+        this.plantUmlFactory = plantUmlFactory;
+    }
 
     /**
      * Specify which files to process.
@@ -96,18 +100,12 @@ public class GenerateMojo extends AbstractMojo {
 
         final PlantUmlFacade plantUml = findPlantUmlFacade();
 
-        final PlantUmlInput input = PlantUmlInput.builder()
-                .filesForProcessing(filesForProcessing)
-                .outputDirectory(Paths.get(outputDirectory.toURI()))
-                .build();
-        final PlantUmlOptions options = PlantUmlOptions.builder()
-                .format(determineOutputFormat())
-                .stripPath(Paths.get(stripPath.toURI()))
-                .build();
+        final PlantUmlInput input = new PlantUmlInput(filesForProcessing, Paths.get(outputDirectory.toURI()));
+        final PlantUmlOptions options = new PlantUmlOptions(determineOutputFormat(), Paths.get(stripPath.toURI()));
 
         final PlantUmlOutput output = plantUml.process(input, options);
         if (output.isFailure()) {
-            throw new MojoExecutionException(((PlantUmlOutput.Failure) output).getMessage());
+            throw new MojoExecutionException(((PlantUmlOutput.Failure) output).message());
         }
     }
 
@@ -137,5 +135,21 @@ public class GenerateMojo extends AbstractMojo {
     private PlantUmlFacade findPlantUmlFacade() throws MojoExecutionException {
         return plantUmlFactory.findPlantUmlImplementation()
                 .orElseThrow(() -> new MojoExecutionException("No PlantUML adapter found. Add one to your classpath. This plugin will not work without it."));
+    }
+
+    public void setSourceFiles(FileSet sourceFiles) {
+        this.sourceFiles = sourceFiles;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public void setOutputDirectory(File outputDirectory) {
+        this.outputDirectory = outputDirectory;
+    }
+
+    public void setStripPath(File stripPath) {
+        this.stripPath = stripPath;
     }
 }

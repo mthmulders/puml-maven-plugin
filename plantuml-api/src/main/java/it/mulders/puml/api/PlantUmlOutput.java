@@ -16,26 +16,16 @@ package it.mulders.puml.api;
  * limitations under the License.
  */
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 /**
  * Output of invoking PlantUML.
  */
 public interface PlantUmlOutput {
-    @AllArgsConstructor
-    @Getter
-    class Success implements PlantUmlOutput {
-        private final int processedCount;
+    record Success(int processedCount) implements PlantUmlOutput {
     }
 
-    @AllArgsConstructor
-    @Getter
-    class Failure implements PlantUmlOutput{
-        private final String message;
-
+    record Failure(String message) implements PlantUmlOutput{
         public Failure(final Throwable cause) {
-            this.message = cause.getMessage();
+            this(cause.getMessage());
         }
     }
 

@@ -39,7 +39,7 @@ class ItemOutputCollectorTest implements WithAssertions {
 
         // Assert
         assertThat(output.isSuccess()).isTrue();
-        assertThat(((Success) output).getProcessedCount()).isEqualTo(0);
+        assertThat(((Success) output).processedCount()).isEqualTo(0);
     }
 
     @Test
@@ -54,7 +54,7 @@ class ItemOutputCollectorTest implements WithAssertions {
 
         // Assert
         assertThat(output.isSuccess()).isTrue();
-        assertThat(((Success) output).getProcessedCount()).isEqualTo(11);
+        assertThat(((Success) output).processedCount()).isEqualTo(11);
     }
 
     @Test
@@ -70,7 +70,7 @@ class ItemOutputCollectorTest implements WithAssertions {
 
         // Assert
         assertThat(output.isSuccess()).isTrue();
-        assertThat(((Success) output).getProcessedCount()).isEqualTo(2);
+        assertThat(((Success) output).processedCount()).isEqualTo(2);
     }
 
     @Test
@@ -86,7 +86,7 @@ class ItemOutputCollectorTest implements WithAssertions {
 
         // Assert
         assertThat(output.isFailure()).isTrue();
-        assertThat(((PlantUmlOutput.Failure) output).getMessage()).contains("wrong.puml");
-        assertThat(((PlantUmlOutput.Failure) output).getMessage()).doesNotContain("good.puml");
+        assertThat(((PlantUmlOutput.Failure) output).message()).contains("wrong.puml");
+        assertThat(((PlantUmlOutput.Failure) output).message()).doesNotContain("good.puml");
     }
 }

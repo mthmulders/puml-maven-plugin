@@ -36,20 +36,20 @@ class PlantUmlOptionsTest implements WithAssertions {
         final Path result = format.convertFilename(Paths.get("example.puml"));
 
         // Assert
-        assertThat(result.toString()).endsWith(format.getExtension());
+        assertThat(result.toString()).endsWith(format.extension);
     }
 
     @EnumSource(Format.class)
     @ParameterizedTest
     void from_extension(final Format format) {
         // Act
-        assertThat(Format.fromExtension(format.getExtension()))
+        assertThat(Format.fromExtension(format.extension))
                 .isPresent()
                 .hasValue(format);
-        assertThat(Format.fromExtension(format.getExtension().toLowerCase()))
+        assertThat(Format.fromExtension(format.extension.toLowerCase()))
                 .isPresent()
                 .hasValue(format);
-        assertThat(Format.fromExtension(format.getExtension().toUpperCase()))
+        assertThat(Format.fromExtension(format.extension.toUpperCase()))
                 .isPresent()
                 .hasValue(format);
     }
@@ -58,23 +58,5 @@ class PlantUmlOptionsTest implements WithAssertions {
     void from_unknown_extension() {
         assertThat(Format.fromExtension("bin"))
                 .isNotPresent();
-    }
-
-    private static final Format format = Format.SVG;
-    private static final Path stripPath = Paths.get("src/main/docs");
-
-    private final PlantUmlOptions result = PlantUmlOptions.builder()
-            .format(format)
-            .stripPath(stripPath)
-            .build();
-
-    @Test
-    void format() {
-        assertThat(result.getFormat()).isEqualTo(format);
-    }
-
-    @Test
-    void stripPath() {
-        assertThat(result.getStripPath()).isEqualTo(stripPath);
     }
 }

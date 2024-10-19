@@ -105,7 +105,7 @@ class GenerateMojoTest implements WithAssertions {
         verify(plantUml).process(inputCaptor.capture(), any());
 
         final PlantUmlInput input = inputCaptor.getValue();
-        assertThat(input.getFilesForProcessing()).isEqualTo(files);
+        assertThat(input.filesForProcessing()).isEqualTo(files);
     }
 
     @Test
@@ -125,7 +125,7 @@ class GenerateMojoTest implements WithAssertions {
         verify(plantUml).process(inputCaptor.capture(), any());
 
         final PlantUmlInput input = inputCaptor.getValue();
-        assertThat(input.getOutputDirectory().toAbsolutePath()).isEqualTo(Paths.get(outputDirectory.toURI()));
+        assertThat(input.outputDirectory().toAbsolutePath()).isEqualTo(Paths.get(outputDirectory.toURI()));
     }
 
     @Test

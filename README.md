@@ -29,7 +29,7 @@
 ## Requirements
 Initially, this plugin required your build to run on Java 8 or higher.
 
-Starting with version 0.3, your build should run on Java 17 or higher.
+Starting with version 0.3, your build should run with Maven 3.9.6 or higher with at least Java 17.
 Note that this does not mean your code has to be Java 17 or higher; you can always use a [Maven Toolchain](https://maarten.mulders.it/2021/03/introduction-to-maven-toolchains/) if you're building Java 8 or earlier.
 
 ## Usage

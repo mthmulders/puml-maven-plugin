@@ -30,6 +30,10 @@
     <packaging>maven-plugin</packaging>
     <name>PlantUML Maven Plugin :: Maven Plugin</name>
 
+    <prerequisites>
+        <maven>3.9.6</maven>
+    </prerequisites>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>

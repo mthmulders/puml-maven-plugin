@@ -100,10 +100,10 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         final String input;
 
         try {
-            log.debug("Reading input from {}", inputPath.toString());
+            log.debug("Reading input from {}", inputPath);
             input = new String(Files.readAllBytes(inputPath));
         } catch (IOException e) {
-            log.error("Could not read input file {}", inputPath.toString(), e);
+            log.error("Could not read input file {}", inputPath, e);
             return result.success(false).build();
         }
 
@@ -112,7 +112,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
             log.debug("Processing diagram");
             return processDiagram(input, bos, options);
         } catch (IOException e) {
-            log.error( "Could not write to output file {}", outputPath.toString(), e);
+            log.error( "Could not write to output file {}", outputPath, e);
             return result.success(false).build();
         }
     }

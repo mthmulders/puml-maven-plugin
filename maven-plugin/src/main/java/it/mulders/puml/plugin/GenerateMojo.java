@@ -125,7 +125,7 @@ public class GenerateMojo extends AbstractMojo {
         final boolean validFormat = Format.fromExtension(this.format).isPresent();
         if (!validFormat) {
             final String formats = Arrays.stream(Format.values()).map(Format::name).collect(joining(", "));
-            log.error("Specified output format is not valid; supported options are " + formats);
+            log.error("Specified output format is not valid; supported options are {}", formats);
             return false;
         }
 

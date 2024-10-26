@@ -28,6 +28,3 @@ updates:
   ignore:
     # Manually upgrading this one
     - dependency-name: "org.apache.maven:maven-plugin-api"
-    - dependency-name: "org.mockito:mockito-core"
-      versions:
-      - ">=5.0.0"

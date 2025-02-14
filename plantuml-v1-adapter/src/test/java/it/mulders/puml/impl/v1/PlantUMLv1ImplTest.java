@@ -213,7 +213,8 @@ class PlantUMLv1ImplTest implements WithAssertions {
                 @enduml
                 """;
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        final PlantUmlOptions options = new PlantUmlOptions(PlantUmlOptions.Format.SVG, null, singletonList("layout=smetana"));
+        final PlantUmlOptions options =
+                new PlantUmlOptions(PlantUmlOptions.Format.SVG, null, singletonList("layout=smetana"));
 
         // Act
         impl.processDiagram(input, output, options);

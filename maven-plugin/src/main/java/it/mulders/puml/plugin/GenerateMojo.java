@@ -110,8 +110,8 @@ public class GenerateMojo extends AbstractMojo {
         final PlantUmlFacade plantUml = findPlantUmlFacade();
 
         final PlantUmlInput input = new PlantUmlInput(filesForProcessing, Paths.get(outputDirectory.toURI()));
-        final PlantUmlOptions options = new PlantUmlOptions(
-                determineOutputFormat(), Paths.get(stripPath.toURI()), pragmas);
+        final PlantUmlOptions options =
+                new PlantUmlOptions(determineOutputFormat(), Paths.get(stripPath.toURI()), pragmas);
 
         final PlantUmlOutput output = plantUml.process(input, options);
         if (output.isFailure()) {

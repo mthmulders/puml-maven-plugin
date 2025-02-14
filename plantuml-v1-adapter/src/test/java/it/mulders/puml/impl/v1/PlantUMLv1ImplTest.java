@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PlantUMLv1ImplTest implements WithAssertions {
-    private static final PlantUmlOptions OPTIONS = new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"));
+    private static final PlantUmlOptions OPTIONS = new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"), null);
     private static final Path EXISTING = Paths.get("src", "test", "resources", "existing.puml");
 
     private final PlantUMLv1Impl impl = new PlantUMLv1Impl();
@@ -155,7 +155,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
     @ParameterizedTest
     void fileFormatOption(final PlantUmlOptions.Format format) {
         // Act
-        final FileFormatOption option = impl.fileFormatOption(new PlantUmlOptions(format, null));
+        final FileFormatOption option = impl.fileFormatOption(new PlantUmlOptions(format, null, null));
 
         // Assert
         assertThat(option).isNotNull();
@@ -175,6 +175,28 @@ class PlantUMLv1ImplTest implements WithAssertions {
 
         // Act
         impl.processDiagram(input, output, OPTIONS);
+
+        // Assert
+        assertThat(output.toString())
+                .contains("<svg xmlns=\"http://www.w3.org/2000/svg\"")
+                .contains("</svg>");
+    }
+
+    @Test
+    void should_include_pragmas_in_input() throws IOException {
+        // Arrange
+        final String input =
+                """
+                @startuml
+                class PlantUMLv1Impl {
+                }
+                @enduml
+                """;
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final PlantUmlOptions options = new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"), singletonList("pragma1"));
+
+        // Act
+        impl.processDiagram(input, output, options);
 
         // Assert
         assertThat(output.toString())

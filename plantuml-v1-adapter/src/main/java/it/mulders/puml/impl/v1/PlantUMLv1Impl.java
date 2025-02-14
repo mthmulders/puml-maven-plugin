@@ -125,6 +125,11 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
 
         try {
             System.setProperty(HEADLESS, "true");
+            if (options.pragmas() != null) {
+                for (String pragma : options.pragmas()) {
+                    reader.setPreprocessorInclude(pragma);
+                }
+            }
             reader.outputImage( output, fileFormatOption( options ) );
         } finally {
             // Restore old value

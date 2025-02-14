@@ -41,7 +41,7 @@ class OutputDirectorTest implements WithAssertions {
             final Path inputFile = Paths.get("src", "test", "resources", "example", "input.puml");
             final Path outputDirectory = Paths.get("target");
             final PlantUmlOptions options =
-                    new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"));
+                    new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"), null);
 
             // Act
             final Path result = director.computeOutputPath(inputFile, outputDirectory, options);
@@ -56,7 +56,7 @@ class OutputDirectorTest implements WithAssertions {
             final Path inputFile = Paths.get("target", "generated-docs", "class-diagram.plantuml");
             final Path outputDirectory = Paths.get("target", "site");
             final PlantUmlOptions options =
-                    new PlantUmlOptions(PlantUmlOptions.Format.PNG, Paths.get("target", "generated-docs"));
+                    new PlantUmlOptions(PlantUmlOptions.Format.PNG, Paths.get("target", "generated-docs"), null);
 
             // Act
             final Path result = director.computeOutputPath(inputFile, outputDirectory, options);

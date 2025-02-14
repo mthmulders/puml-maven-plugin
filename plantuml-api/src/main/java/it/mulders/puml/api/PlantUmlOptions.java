@@ -19,12 +19,13 @@ package it.mulders.puml.api;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
  * Options to pass to PlantUML.
  */
-public record PlantUmlOptions(Format format, Path stripPath) {
+public record PlantUmlOptions(Format format, Path stripPath, List<String> pragmas) {
 
     public enum Format {
         PNG("png"),

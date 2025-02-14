@@ -33,6 +33,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import net.sourceforge.plantuml.Defines;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
@@ -117,7 +118,8 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
     ItemOutput processDiagram(final String input, final OutputStream output, final PlantUmlOptions options)
             throws IOException {
         final ItemOutput.ItemOutputBuilder result = ItemOutput.builder();
-        final SourceStringReader reader = new SourceStringReader(input);
+        final SourceStringReader reader = new SourceStringReader(
+                Defines.createEmpty(), input, options.pragmas().stream().map(p -> "!pragma " + p).toList());
 
         final String headless = System.getProperty(HEADLESS);
 

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>it.mulders.puml.tests</groupId>
+    <artifactId>should-generate-single-pragma</artifactId>
+    <version>1</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>it.mulders.puml</groupId>
+                <artifactId>plantuml-maven-plugin</artifactId>
+                <version>@project.version@</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>it.mulders.puml</groupId>
+                        <artifactId>plantuml-v1-adapter</artifactId>
+                        <version>@project.version@</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>net.sourceforge.plantuml</groupId>
+                        <artifactId>plantuml</artifactId>
+                        <version>1.2020.9</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <format>SVG</format>
+                    <sourceFiles>
+                        <directory>\${project.basedir}</directory>
+                        <includes>
+                            <include>src/main/docs/**/*.puml</include>
+                        </includes>
+                    </sourceFiles>
+                    <stripPath>src/main</stripPath>
+                    <pragmas>
+                        <pragma>layout=smetana</pragma>
+                    </pragmas>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -25,11 +25,13 @@ import static org.mockito.Mockito.when;
 
 import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
+import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -159,5 +161,26 @@ class GenerateMojoTest implements WithAssertions {
 
         // Assert
         verify(plantUml, never()).process(any(), any());
+    }
+
+    @Test
+    void should_pass_pragmas_to_PlantUML() throws MojoExecutionException {
+        // Arrange
+        final List<String> pragmas = List.of("pragma1", "pragma2");
+        mojo.setPragmas(pragmas);
+        mojo.setSourceFiles(new FileSetBuilder().baseDirectory(Paths.get(".")).build());
+        mojo.setOutputDirectory(new File("target"));
+        mojo.setFormat("svg");
+        mojo.setStripPath(new File("."));
+
+        // Act
+        mojo.execute();
+
+        // Assert
+        final ArgumentCaptor<PlantUmlOptions> optionsCaptor = ArgumentCaptor.forClass(PlantUmlOptions.class);
+        verify(plantUml).process(any(), optionsCaptor.capture());
+
+        final PlantUmlOptions options = optionsCaptor.getValue();
+        assertThat(options.pragmas()).isEqualTo(pragmas);
     }
 }

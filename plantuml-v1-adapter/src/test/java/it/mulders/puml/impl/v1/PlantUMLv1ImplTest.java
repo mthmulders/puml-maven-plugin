@@ -44,7 +44,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PlantUMLv1ImplTest implements WithAssertions {
     private static final PlantUmlOptions OPTIONS =
-            new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"));
+            new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"), null);
     private static final Path EXISTING = Paths.get("src", "test", "resources", "existing.puml");
 
     private final PlantUMLv1Impl impl = new PlantUMLv1Impl();
@@ -153,7 +153,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
     @ParameterizedTest
     void fileFormatOption(final PlantUmlOptions.Format format) {
         // Act
-        final FileFormatOption option = impl.fileFormatOption(new PlantUmlOptions(format, null));
+        final FileFormatOption option = impl.fileFormatOption(new PlantUmlOptions(format, null, null));
 
         // Assert
         assertThat(option).isNotNull();
@@ -173,6 +173,50 @@ class PlantUMLv1ImplTest implements WithAssertions {
 
         // Act
         impl.processDiagram(input, output, OPTIONS);
+
+        // Assert
+        assertThat(output.toString())
+                .contains("<svg xmlns=\"http://www.w3.org/2000/svg\"")
+                .contains("</svg>");
+    }
+
+    @Test
+    void should_handle_null_pragmas() throws IOException {
+        // Arrange
+        final String input =
+                """
+                @startuml
+                class PlantUMLv1Impl {
+                }
+                @enduml
+                """;
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final PlantUmlOptions options = new PlantUmlOptions(PlantUmlOptions.Format.SVG, null, null);
+
+        // Act
+        impl.processDiagram(input, output, options);
+
+        // Assert
+        assertThat(output.toString())
+                .contains("<svg xmlns=\"http://www.w3.org/2000/svg\"")
+                .contains("</svg>");
+    }
+
+    @Test
+    void should_handle_single_pragma() throws IOException {
+        // Arrange
+        final String input =
+                """
+                @startuml
+                class PlantUMLv1Impl {
+                }
+                @enduml
+                """;
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final PlantUmlOptions options = new PlantUmlOptions(PlantUmlOptions.Format.SVG, null, singletonList("layout=smetana"));
+
+        // Act
+        impl.processDiagram(input, output, options);
 
         // Assert
         assertThat(output.toString())

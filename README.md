@@ -111,6 +111,12 @@ You can configure the goal using these parameters:
 | Default value | - |
 | Values | `PNG`, `SVG` |
 
+| **Pragmas** | Pragmas to be passed to PlantUML. | 
+| --- | --- |
+| Name | `pragmas` |
+| Property | `plantuml.pragmas` | 
+| Required? | no |
+| Default value | - |
 
 ## Path stripping
 The plugin will remove the `stripPath` parameter from each input file name and then create the output file name from the remainder of the input file name.

@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import javax.inject.Inject;
 import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.AbstractMojo;
@@ -92,6 +93,12 @@ public class GenerateMojo extends AbstractMojo {
     @Parameter(required = true, property = "plantuml.format")
     private String format;
 
+    /**
+     * Specify pragmas to be passed to PlantUML.
+     */
+    @Parameter(property = "plantuml.pragmas")
+    private List<String> pragmas;
+
     @Override
     public void execute() throws MojoExecutionException {
         if (!verifyParameters()) {
@@ -103,7 +110,8 @@ public class GenerateMojo extends AbstractMojo {
         final PlantUmlFacade plantUml = findPlantUmlFacade();
 
         final PlantUmlInput input = new PlantUmlInput(filesForProcessing, Paths.get(outputDirectory.toURI()));
-        final PlantUmlOptions options = new PlantUmlOptions(determineOutputFormat(), Paths.get(stripPath.toURI()));
+        final PlantUmlOptions options = new PlantUmlOptions(
+                determineOutputFormat(), Paths.get(stripPath.toURI()), pragmas);
 
         final PlantUmlOutput output = plantUml.process(input, options);
         if (output.isFailure()) {
@@ -156,5 +164,9 @@ public class GenerateMojo extends AbstractMojo {
 
     public void setStripPath(File stripPath) {
         this.stripPath = stripPath;
+    }
+
+    public void setPragmas(List<String> pragmas) {
+        this.pragmas = pragmas;
     }
 }

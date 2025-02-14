@@ -139,7 +139,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         return result.success(true).build();
     }
 
-    private List<String> mapPragmasToConfig(final List<String> pragmas) {
+    List<String> mapPragmasToConfig(final List<String> pragmas) {
         if (pragmas == null || pragmas.isEmpty()) {
             return Collections.emptyList();
         }

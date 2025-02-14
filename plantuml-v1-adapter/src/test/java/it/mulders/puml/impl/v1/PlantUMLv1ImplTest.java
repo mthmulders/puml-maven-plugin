@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import net.sourceforge.plantuml.FileFormatOption;
 import org.assertj.core.api.WithAssertions;
@@ -223,6 +224,18 @@ class PlantUMLv1ImplTest implements WithAssertions {
         assertThat(output.toString())
                 .contains("<svg xmlns=\"http://www.w3.org/2000/svg\"")
                 .contains("</svg>");
+    }
+
+    @Test
+    void should_convert_multiple_pragmas() {
+        // Arrange
+        final List<String> pragmas = List.of("", " ", "\n", "layout=smetana", "teoz true");
+
+        // Act
+        final List<String> result = impl.mapPragmasToConfig(pragmas);
+
+        // Assert
+        assertThat(result).containsExactly("!pragma layout smetana", "!pragma teoz true");
     }
 
     @Test

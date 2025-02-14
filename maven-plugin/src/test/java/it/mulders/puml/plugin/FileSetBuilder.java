@@ -16,11 +16,10 @@ package it.mulders.puml.plugin;
  * limitations under the License.
  */
 
-import org.apache.maven.model.FileSet;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import org.apache.maven.model.FileSet;
 
 public class FileSetBuilder {
     private final FileSet fileSet = new FileSet();

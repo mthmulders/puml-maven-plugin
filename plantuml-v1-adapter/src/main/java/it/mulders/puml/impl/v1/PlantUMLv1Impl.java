@@ -16,18 +16,14 @@ package it.mulders.puml.impl.v1;
  * limitations under the License.
  */
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+
 import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
 import it.mulders.puml.api.PlantUmlOutput.Success;
-import net.sourceforge.plantuml.FileFormat;
-import net.sourceforge.plantuml.FileFormatOption;
-import net.sourceforge.plantuml.SourceStringReader;
-import net.sourceforge.plantuml.version.Version;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,9 +33,12 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
-
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
+import net.sourceforge.plantuml.FileFormat;
+import net.sourceforge.plantuml.FileFormatOption;
+import net.sourceforge.plantuml.SourceStringReader;
+import net.sourceforge.plantuml.version.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of the {@link PlantUmlFacade} based on PlantUML v1.x.y.
@@ -74,7 +73,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
 
         final Path outputDirectory = input.outputDirectory();
         final Map<Path, Path> inputToOutputMapping = filesForProcessing.stream()
-                .collect(toMap(identity(), path -> outputDirector.computeOutputPath( path, outputDirectory, options)));
+                .collect(toMap(identity(), path -> outputDirector.computeOutputPath(path, outputDirectory, options)));
 
         return inputToOutputMapping.values().stream()
                 // Validate the output directory for each file that we must process
@@ -86,11 +85,9 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
                 .map(PlantUmlOutput.class::cast)
                 .findAny()
                 // ... otherwise, start processing files.
-                .orElseGet(() ->
-                    inputToOutputMapping.entrySet().stream()
-                            .map(entry -> processDiagram(entry.getKey(), entry.getValue(), options))
-                            .collect(new ItemOutputCollector())
-                );
+                .orElseGet(() -> inputToOutputMapping.entrySet().stream()
+                        .map(entry -> processDiagram(entry.getKey(), entry.getValue(), options))
+                        .collect(new ItemOutputCollector()));
     }
 
     private ItemOutput processDiagram(final Path inputPath, final Path outputPath, final PlantUmlOptions options) {
@@ -108,16 +105,17 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         }
 
         try (final OutputStream fos = new FileOutputStream(outputPath.toFile());
-             final OutputStream bos = new BufferedOutputStream(fos)) {
+                final OutputStream bos = new BufferedOutputStream(fos)) {
             log.debug("Processing diagram");
             return processDiagram(input, bos, options);
         } catch (IOException e) {
-            log.error( "Could not write to output file {}", outputPath, e);
+            log.error("Could not write to output file {}", outputPath, e);
             return result.success(false).build();
         }
     }
 
-    ItemOutput processDiagram(final String input, final OutputStream output, final PlantUmlOptions options) throws IOException {
+    ItemOutput processDiagram(final String input, final OutputStream output, final PlantUmlOptions options)
+            throws IOException {
         final ItemOutput.ItemOutputBuilder result = ItemOutput.builder();
         final SourceStringReader reader = new SourceStringReader(input);
 
@@ -125,7 +123,7 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
 
         try {
             System.setProperty(HEADLESS, "true");
-            reader.outputImage( output, fileFormatOption( options ) );
+            reader.outputImage(output, fileFormatOption(options));
         } finally {
             // Restore old value
             if (headless != null) {

@@ -47,13 +47,15 @@ class PlantUmlOutputTest implements WithAssertions {
 
         @Test
         void getMessage_from_exception() {
-            assertThat(new Failure(new IllegalArgumentException("Wrong argument")).message()).isEqualTo("Wrong argument");
+            assertThat(new Failure(new IllegalArgumentException("Wrong argument")).message())
+                    .isEqualTo("Wrong argument");
         }
     }
 
     @Nested
     class SuccessTest {
         private final Success result = new Success(1);
+
         @Test
         void is_success() {
             assertThat(result.isFailure()).isFalse();

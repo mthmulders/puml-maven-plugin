@@ -16,10 +16,11 @@ package it.mulders.puml.impl.v1;
  * limitations under the License.
  */
 
+import static java.util.function.Predicate.not;
+
 import it.mulders.puml.api.PlantUmlOutput;
 import it.mulders.puml.api.PlantUmlOutput.Failure;
 import it.mulders.puml.api.PlantUmlOutput.Success;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,8 +32,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-import static java.util.function.Predicate.not;
 
 /**
  * Aggregates the PlantUML output of each processed file and converts that into one {@link PlantUmlOutput} value.

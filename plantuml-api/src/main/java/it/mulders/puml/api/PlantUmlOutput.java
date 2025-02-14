@@ -20,10 +20,9 @@ package it.mulders.puml.api;
  * Output of invoking PlantUML.
  */
 public interface PlantUmlOutput {
-    record Success(int processedCount) implements PlantUmlOutput {
-    }
+    record Success(int processedCount) implements PlantUmlOutput {}
 
-    record Failure(String message) implements PlantUmlOutput{
+    record Failure(String message) implements PlantUmlOutput {
         public Failure(final Throwable cause) {
             this(cause.getMessage());
         }

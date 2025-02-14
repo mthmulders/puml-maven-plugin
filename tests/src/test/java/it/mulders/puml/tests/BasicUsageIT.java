@@ -16,18 +16,17 @@ package it.mulders.puml.tests;
  * limitations under the License.
  */
 
+import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
+
 import com.soebes.itf.jupiter.extension.MavenGoal;
 import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
 import com.soebes.itf.jupiter.extension.MavenTest;
 import com.soebes.itf.jupiter.maven.MavenExecutionResult;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
-import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
 
 @MavenJupiterExtension
 public class BasicUsageIT {
@@ -38,9 +37,7 @@ public class BasicUsageIT {
 
         final Path baseDir = result.getMavenProjectResult().getTargetProjectDirectory();
         final Path outputDirectory = baseDir.resolve(Paths.get("target", "plantuml"));
-        assertThat(outputDirectory)
-                .exists()
-                .isDirectory();
+        assertThat(outputDirectory).exists().isDirectory();
 
         final Path outputFile = outputDirectory.resolve(Paths.get("docs", "example.svg"));
 
@@ -56,9 +53,7 @@ public class BasicUsageIT {
 
         final Path baseDir = result.getMavenProjectResult().getTargetProjectDirectory();
         final Path outputDirectory = baseDir.resolve(Paths.get("target", "plantuml"));
-        assertThat(outputDirectory)
-                .exists()
-                .isDirectory();
+        assertThat(outputDirectory).exists().isDirectory();
 
         final Path outputFile = outputDirectory.resolve(Paths.get("docs", "example.png"));
 

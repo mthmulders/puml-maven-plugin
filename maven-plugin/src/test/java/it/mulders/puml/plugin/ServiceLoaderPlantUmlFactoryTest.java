@@ -21,17 +21,16 @@ import com.github.valfirst.slf4jtest.TestLogger;
 import com.github.valfirst.slf4jtest.TestLoggerFactory;
 import com.github.valfirst.slf4jtest.TestLoggerFactoryExtension;
 import it.mulders.puml.api.PlantUmlFacade;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Optional;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.event.Level;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Optional;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ExtendWith(TestLoggerFactoryExtension.class)
@@ -77,11 +76,9 @@ class ServiceLoaderPlantUmlFactoryTest implements WithAssertions {
         Optional<LoggingEvent> result = logger.getLoggingEvents().stream()
                 .filter(e -> e.getMessage().contains("adapter found in"))
                 .findFirst();
-        assertThat(result).isPresent().hasValueSatisfying(event ->
-            assertThat(event.getArguments()).hasSize(1).satisfies(arg ->
-                assertThat(arg.toString()).contains("test-classes")
-            )
-        );
+        assertThat(result).isPresent().hasValueSatisfying(event -> assertThat(event.getArguments())
+                .hasSize(1)
+                .satisfies(arg -> assertThat(arg.toString()).contains("test-classes")));
     }
 
     private final PlantUmlFacade impl1 = (input, options) -> null;

@@ -16,11 +16,20 @@ package it.mulders.puml.plugin;
  * limitations under the License.
  */
 
+import static java.util.stream.Collectors.joining;
+
 import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOptions.Format;
 import it.mulders.puml.api.PlantUmlOutput;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collection;
+import javax.inject.Inject;
 import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -29,16 +38,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collection;
-
-import static java.util.stream.Collectors.joining;
 
 /**
  * Generates diagrams from a set of input files.
@@ -69,7 +68,10 @@ public class GenerateMojo extends AbstractMojo {
     /**
      * Specify where to place generated diagrams.
      */
-    @Parameter(required = true, property = "plantuml.outputDirectory", defaultValue = "${project.build.directory}/plantuml")
+    @Parameter(
+            required = true,
+            property = "plantuml.outputDirectory",
+            defaultValue = "${project.build.directory}/plantuml")
     private File outputDirectory;
 
     // Would be great if we could use java.nio.file.Path here.
@@ -124,7 +126,8 @@ public class GenerateMojo extends AbstractMojo {
 
         final boolean validFormat = Format.fromExtension(this.format).isPresent();
         if (!validFormat) {
-            final String formats = Arrays.stream(Format.values()).map(Format::name).collect(joining(", "));
+            final String formats =
+                    Arrays.stream(Format.values()).map(Format::name).collect(joining(", "));
             log.error("Specified output format is not valid; supported options are {}", formats);
             return false;
         }
@@ -133,8 +136,10 @@ public class GenerateMojo extends AbstractMojo {
     }
 
     private PlantUmlFacade findPlantUmlFacade() throws MojoExecutionException {
-        return plantUmlFactory.findPlantUmlImplementation()
-                .orElseThrow(() -> new MojoExecutionException("No PlantUML adapter found. Add one to your classpath. This plugin will not work without it."));
+        return plantUmlFactory
+                .findPlantUmlImplementation()
+                .orElseThrow(() -> new MojoExecutionException(
+                        "No PlantUML adapter found. Add one to your classpath. This plugin will not work without it."));
     }
 
     public void setSourceFiles(FileSet sourceFiles) {

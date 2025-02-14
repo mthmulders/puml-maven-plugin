@@ -16,6 +16,13 @@ package it.mulders.puml.plugin;
  * limitations under the License.
  */
 
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.List;
 import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.assertj.core.api.WithAssertions;
@@ -23,17 +30,10 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.List;
-
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
-
-@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class DefaultInputFileLocatorTest implements WithAssertions {
-    private static final Path BASE_DIRECTORY = Paths.get("src", "test", "resources", "locating").toAbsolutePath();
+    private static final Path BASE_DIRECTORY =
+            Paths.get("src", "test", "resources", "locating").toAbsolutePath();
 
     private final InputFileLocator locator = new DefaultInputFileLocator();
 
@@ -55,7 +55,7 @@ class DefaultInputFileLocatorTest implements WithAssertions {
                 .collect(toList());
         assertThat(paths).containsOnly("a.txt", "b.txt", "c.dot");
     }
-    
+
     @Test
     void should_apply_exclude_patterns_in_directory() throws MojoExecutionException {
         // Arrange

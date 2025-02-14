@@ -16,10 +16,22 @@ package it.mulders.puml.impl.v1;
  * limitations under the License.
  */
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
 import it.mulders.puml.api.PlantUmlOutput.Failure;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 import net.sourceforge.plantuml.FileFormatOption;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -29,22 +41,10 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
-
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PlantUMLv1ImplTest implements WithAssertions {
-    private static final PlantUmlOptions OPTIONS = new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"));
+    private static final PlantUmlOptions OPTIONS =
+            new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"));
     private static final Path EXISTING = Paths.get("src", "test", "resources", "existing.puml");
 
     private final PlantUMLv1Impl impl = new PlantUMLv1Impl();
@@ -106,12 +106,10 @@ class PlantUMLv1ImplTest implements WithAssertions {
         final PlantUmlInput input = new PlantUmlInput(singletonList(EXISTING), outputDirectory);
 
         // Act
-        impl.process(input, OPTIONS );
+        impl.process(input, OPTIONS);
 
         // Assert
-        assertThat(outputDirectory)
-                .isDirectory()
-                .exists();
+        assertThat(outputDirectory).isDirectory().exists();
         assertThat(outputDirectory.resolve(Paths.get("existing.svg")))
                 .isRegularFile()
                 .exists();

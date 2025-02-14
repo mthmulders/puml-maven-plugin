@@ -17,7 +17,6 @@ package it.mulders.puml.plugin;
  */
 
 import it.mulders.puml.api.PlantUmlFacade;
-
 import java.util.Optional;
 
 /**

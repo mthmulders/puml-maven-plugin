@@ -16,9 +16,21 @@ package it.mulders.puml.plugin;
  * limitations under the License.
  */
 
+import static java.util.Collections.singletonList;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOutput;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Optional;
 import org.apache.maven.model.FileSet;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.assertj.core.api.WithAssertions;
@@ -27,19 +39,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Optional;
-
-import static java.util.Collections.singletonList;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class GenerateMojoTest implements WithAssertions {
@@ -58,7 +57,8 @@ class GenerateMojoTest implements WithAssertions {
     @Test
     void should_fail_without_PlantUMLFactory_implementation() {
         // Arrange
-        final FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get(".")).build();
+        final FileSet fileSet =
+                new FileSetBuilder().baseDirectory(Paths.get(".")).build();
         mojo.setSourceFiles(fileSet);
         mojo.setFormat("svg");
         when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.empty());
@@ -66,15 +66,16 @@ class GenerateMojoTest implements WithAssertions {
         // Act
         assertThatThrownBy(mojo::execute)
 
-        // Assert
-            .isInstanceOf( MojoExecutionException.class)
-            .hasMessageContaining("No PlantUML adapter found");
+                // Assert
+                .isInstanceOf(MojoExecutionException.class)
+                .hasMessageContaining("No PlantUML adapter found");
     }
 
     @Test
     void should_invoke_PlantUMLFacade() throws MojoExecutionException {
         // Arrange
-        final FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get(".")).build();
+        final FileSet fileSet =
+                new FileSetBuilder().baseDirectory(Paths.get(".")).build();
         mojo.setOutputDirectory(new File("target"));
         mojo.setSourceFiles(fileSet);
         mojo.setFormat("svg");
@@ -90,7 +91,7 @@ class GenerateMojoTest implements WithAssertions {
     @Test
     void should_pass_files_to_process_to_PlantUML() throws MojoExecutionException {
         // Arrange
-        final Collection<Path> files = singletonList(Paths.get( "./example.puml"));
+        final Collection<Path> files = singletonList(Paths.get("./example.puml"));
         when(inputFileLocator.determineFilesForProcessing(any())).thenReturn(files);
         mojo.setSourceFiles(new FileSetBuilder().baseDirectory(Paths.get(".")).build());
         mojo.setOutputDirectory(new File("target"));
@@ -131,9 +132,8 @@ class GenerateMojoTest implements WithAssertions {
     @Test
     void should_not_invoke_PlantUML_when_source_directory_is_invalid() throws MojoExecutionException {
         // Arrange
-        final FileSet fileSet = new FileSetBuilder()
-                .baseDirectory(Paths.get("non-existing"))
-                .build();
+        final FileSet fileSet =
+                new FileSetBuilder().baseDirectory(Paths.get("non-existing")).build();
         mojo.setSourceFiles(fileSet);
         mojo.setOutputDirectory(new File("target"));
         mojo.setFormat("svg");
@@ -148,7 +148,8 @@ class GenerateMojoTest implements WithAssertions {
     @Test
     void should_not_invoke_PlantUML_when_outputFormat_is_invalid() throws MojoExecutionException {
         // Arrange
-        final FileSet fileSet = new FileSetBuilder().baseDirectory(Paths.get(".")).build();
+        final FileSet fileSet =
+                new FileSetBuilder().baseDirectory(Paths.get(".")).build();
         mojo.setSourceFiles(fileSet);
         mojo.setOutputDirectory(new File("target"));
         mojo.setFormat("foo");

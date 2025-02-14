@@ -18,14 +18,13 @@ package it.mulders.puml.impl.v1;
 
 import it.mulders.puml.api.PlantUmlOutput;
 import it.mulders.puml.api.PlantUmlOutput.Success;
+import java.nio.file.Paths;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-
-import java.nio.file.Paths;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class ItemOutputCollectorTest implements WithAssertions {
@@ -47,7 +46,7 @@ class ItemOutputCollectorTest implements WithAssertions {
         // Arrange
         final Stream<ItemOutput> inputs = IntStream.rangeClosed(0, 10)
                 .parallel()
-                .mapToObj( i -> ItemOutput.builder().success(true).build() );
+                .mapToObj(i -> ItemOutput.builder().success(true).build());
 
         // Act
         final PlantUmlOutput output = inputs.collect(new ItemOutputCollector());
@@ -61,9 +60,8 @@ class ItemOutputCollectorTest implements WithAssertions {
     void with_no_failed_inputs_should_return_success() {
         // Arrange
         final Stream<ItemOutput> inputs = Stream.of(
-            ItemOutput.builder().success(true).build(),
-            ItemOutput.builder().success(true).build()
-        );
+                ItemOutput.builder().success(true).build(),
+                ItemOutput.builder().success(true).build());
 
         // Act
         final PlantUmlOutput output = inputs.collect(new ItemOutputCollector());
@@ -78,8 +76,10 @@ class ItemOutputCollectorTest implements WithAssertions {
         // Arrange
         final Stream<ItemOutput> inputs = Stream.of(
                 ItemOutput.builder().success(true).input(Paths.get("good.puml")).build(),
-                ItemOutput.builder().success(false).input(Paths.get("wrong.puml")).build()
-        );
+                ItemOutput.builder()
+                        .success(false)
+                        .input(Paths.get("wrong.puml"))
+                        .build());
 
         // Act
         final PlantUmlOutput output = inputs.collect(new ItemOutputCollector());

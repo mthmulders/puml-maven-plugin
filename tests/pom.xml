@@ -15,128 +15,128 @@
    limitations under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>it.mulders.puml</groupId>
-        <artifactId>puml-parent</artifactId>
-        <version>0.4-SNAPSHOT</version>
-    </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>it.mulders.puml</groupId>
+    <artifactId>puml-parent</artifactId>
+    <version>0.4-SNAPSHOT</version>
+  </parent>
 
-    <artifactId>plugin-tests</artifactId>
-    <name>PlantUML Maven Plugin :: Integration Tests</name>
-    <description>Integration tests for the PlantUML Maven Plugin</description>
+  <artifactId>plugin-tests</artifactId>
+  <name>PlantUML Maven Plugin :: Integration Tests</name>
+  <description>Integration tests for the PlantUML Maven Plugin</description>
 
-    <properties>
-        <itf.version>0.12.0</itf.version>
-    </properties>
+  <properties>
+    <itf.version>0.12.0</itf.version>
+  </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-xml-impl</artifactId>
-            <version>4.0.0-beta-5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.soebes.itf.jupiter.extension</groupId>
-            <artifactId>itf-extension-maven</artifactId>
-            <version>${itf.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.soebes.itf.jupiter.extension</groupId>
-            <artifactId>itf-assertj</artifactId>
-            <version>${itf.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.soebes.itf.jupiter.extension</groupId>
-            <artifactId>itf-jupiter-extension</artifactId>
-            <version>${itf.version}</version>
-            <scope>test</scope>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-xml-impl</artifactId>
+      <version>4.0.0-beta-5</version>
+    </dependency>
+    <dependency>
+      <groupId>com.soebes.itf.jupiter.extension</groupId>
+      <artifactId>itf-extension-maven</artifactId>
+      <version>${itf.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.soebes.itf.jupiter.extension</groupId>
+      <artifactId>itf-assertj</artifactId>
+      <version>${itf.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.soebes.itf.jupiter.extension</groupId>
+      <artifactId>itf-jupiter-extension</artifactId>
+      <version>${itf.version}</version>
+      <scope>test</scope>
+    </dependency>
 
-        <dependency>
-            <groupId>it.mulders.puml</groupId>
-            <artifactId>plantuml-maven-plugin</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>it.mulders.puml</groupId>
-            <artifactId>plantuml-v1-adapter</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
+    <dependency>
+      <groupId>it.mulders.puml</groupId>
+      <artifactId>plantuml-maven-plugin</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>it.mulders.puml</groupId>
+      <artifactId>plantuml-v1-adapter</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
 
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
 
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-    </dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+    </dependency>
+  </dependencies>
 
-    <build>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-            <testResource>
-                <directory>src/test/resources-its</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
+  <build>
+    <testResources>
+      <testResource>
+        <filtering>true</filtering>
+        <directory>src/test/resources</directory>
+      </testResource>
+      <testResource>
+        <filtering>true</filtering>
+        <directory>src/test/resources-its</directory>
+      </testResource>
+    </testResources>
 
-        <plugins>
-            <plugin>
-                <groupId>com.soebes.itf.jupiter.extension</groupId>
-                <artifactId>itf-maven-plugin</artifactId>
-                <version>${itf.version}</version>
-                <executions>
-                    <execution>
-                        <id>install-plugin</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>install</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+    <plugins>
+      <plugin>
+        <groupId>com.soebes.itf.jupiter.extension</groupId>
+        <artifactId>itf-maven-plugin</artifactId>
+        <version>${itf.version}</version>
+        <executions>
+          <execution>
+            <id>install-plugin</id>
+            <goals>
+              <goal>install</goal>
+            </goals>
+            <phase>pre-integration-test</phase>
+          </execution>
+        </executions>
+      </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <maven.version>${maven.version}</maven.version>
-                        <maven.home>${maven.home}</maven.home>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <maven.version>${maven.version}</maven.version>
+            <maven.home>${maven.home}</maven.home>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <!-- integration tests don't have to be published in Central -->
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <!-- integration tests don't have to be published in Central -->
+          <skip>true</skip>
+        </configuration>
+      </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <configuration>
-                    <!-- necessary to prevent the test case pom.xml files from being filtered;
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <configuration>
+          <!-- necessary to prevent the test case pom.xml files from being filtered;
                          use \${project.basedir} to refer to the test case project basedir. -->
-                    <escapeString>\</escapeString>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+          <escapeString>\</escapeString>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

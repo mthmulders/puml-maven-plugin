@@ -16,11 +16,10 @@ package it.mulders.puml.plugin;
  * limitations under the License.
  */
 
-import org.apache.maven.model.FileSet;
-import org.apache.maven.plugin.MojoExecutionException;
-
 import java.nio.file.Path;
 import java.util.Collection;
+import org.apache.maven.model.FileSet;
+import org.apache.maven.plugin.MojoExecutionException;
 
 /**
  * Locates the files that match a particular {@link FileSet}.

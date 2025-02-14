@@ -17,15 +17,14 @@ package it.mulders.puml.api;
  */
 
 import it.mulders.puml.api.PlantUmlOptions.Format;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PlantUmlOptionsTest implements WithAssertions {
@@ -43,9 +42,7 @@ class PlantUmlOptionsTest implements WithAssertions {
     @ParameterizedTest
     void from_extension(final Format format) {
         // Act
-        assertThat(Format.fromExtension(format.extension))
-                .isPresent()
-                .hasValue(format);
+        assertThat(Format.fromExtension(format.extension)).isPresent().hasValue(format);
         assertThat(Format.fromExtension(format.extension.toLowerCase()))
                 .isPresent()
                 .hasValue(format);
@@ -56,7 +53,6 @@ class PlantUmlOptionsTest implements WithAssertions {
 
     @Test
     void from_unknown_extension() {
-        assertThat(Format.fromExtension("bin"))
-                .isNotPresent();
+        assertThat(Format.fromExtension("bin")).isNotPresent();
     }
 }

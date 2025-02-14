@@ -22,5 +22,4 @@ import java.util.Collection;
 /**
  * Specifies the input that PlantUML should process.
  */
-public record PlantUmlInput(Collection<Path> filesForProcessing, Path outputDirectory) {
-}
+public record PlantUmlInput(Collection<Path> filesForProcessing, Path outputDirectory) {}

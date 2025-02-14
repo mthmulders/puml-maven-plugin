@@ -16,20 +16,19 @@ package it.mulders.puml.plugin;
  * limitations under the License.
  */
 
-import org.apache.maven.model.FileSet;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.codehaus.plexus.util.FileUtils;
+import static java.util.stream.Collectors.toList;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import org.apache.maven.model.FileSet;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * {@inheritDoc}
@@ -48,10 +47,7 @@ public class DefaultInputFileLocator implements InputFileLocator {
 
         try {
             final List<File> files = FileUtils.getFiles(basedir, includes, excludes);
-            return files.stream()
-                    .map(File::toURI)
-                    .map(Paths::get)
-                    .collect(toList());
+            return files.stream().map(File::toURI).map(Paths::get).collect(toList());
         } catch (IOException e) {
             throw new MojoExecutionException("Could not determine files to process", e);
         }

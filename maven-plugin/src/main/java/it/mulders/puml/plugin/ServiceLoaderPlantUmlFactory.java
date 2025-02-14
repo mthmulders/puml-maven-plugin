@@ -17,16 +17,15 @@ package it.mulders.puml.plugin;
  */
 
 import it.mulders.puml.api.PlantUmlFacade;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.ServiceLoader;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * {@inheritDoc}

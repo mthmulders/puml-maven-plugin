@@ -18,15 +18,14 @@ package it.mulders.puml.impl.v1;
 
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for working with output directories and folders.
@@ -43,13 +42,13 @@ public class OutputDirector {
         try {
             Files.createDirectories(outputDirectory);
         } catch (FileAlreadyExistsException faee) {
-            return Optional.of(new PlantUmlOutput.Failure("Specified output directory exists but is a file, not a directory"));
+            return Optional.of(
+                    new PlantUmlOutput.Failure("Specified output directory exists but is a file, not a directory"));
         } catch (IOException e) {
             return Optional.of(new PlantUmlOutput.Failure(e));
         }
         return Optional.empty();
     }
-
 
     // Visible for testing
     public Path computeOutputPath(final Path inputPath, final Path outputDirectory, final PlantUmlOptions options) {
@@ -62,5 +61,4 @@ public class OutputDirector {
         log.info("Computed output path {} for input {}", outputPath, inputPath);
         return outputPath;
     }
-
 }

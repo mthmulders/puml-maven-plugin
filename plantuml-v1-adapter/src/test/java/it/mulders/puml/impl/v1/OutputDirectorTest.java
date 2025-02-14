@@ -18,17 +18,16 @@ package it.mulders.puml.impl.v1;
 
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput.Failure;
-import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class OutputDirectorTest implements WithAssertions {
     private final OutputDirector director = new OutputDirector();
@@ -41,7 +40,8 @@ class OutputDirectorTest implements WithAssertions {
             // Arrange
             final Path inputFile = Paths.get("src", "test", "resources", "example", "input.puml");
             final Path outputDirectory = Paths.get("target");
-            final PlantUmlOptions options = new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"));
+            final PlantUmlOptions options =
+                    new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"));
 
             // Act
             final Path result = director.computeOutputPath(inputFile, outputDirectory, options);
@@ -55,7 +55,8 @@ class OutputDirectorTest implements WithAssertions {
             // Arrange
             final Path inputFile = Paths.get("target", "generated-docs", "class-diagram.plantuml");
             final Path outputDirectory = Paths.get("target", "site");
-            final PlantUmlOptions options = new PlantUmlOptions(PlantUmlOptions.Format.PNG, Paths.get("target", "generated-docs"));
+            final PlantUmlOptions options =
+                    new PlantUmlOptions(PlantUmlOptions.Format.PNG, Paths.get("target", "generated-docs"));
 
             // Act
             final Path result = director.computeOutputPath(inputFile, outputDirectory, options);
@@ -92,8 +93,8 @@ class OutputDirectorTest implements WithAssertions {
             final Optional<Failure> output = director.ensureOutputDirectoryExists(outputDirectoryThatIsFile);
 
             // Assert
-            assertThat(output).isPresent()
-                    .hasValueSatisfying(result -> assertThat(result).isInstanceOf( Failure.class));
+            assertThat(output).isPresent().hasValueSatisfying(result -> assertThat(result)
+                    .isInstanceOf(Failure.class));
             assertThat(outputDirectoryThatIsFile).exists();
             assertThat(outputDirectoryThatIsFile).isRegularFile();
         }
@@ -113,5 +114,4 @@ class OutputDirectorTest implements WithAssertions {
             assertThat(outputDirectory).isDirectory();
         }
     }
-
 }

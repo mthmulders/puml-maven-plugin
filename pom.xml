@@ -72,6 +72,10 @@
     <maven.compiler.release>17</maven.compiler.release>
 
     <junit-jupiter.version>5.11.4</junit-jupiter.version>
+
+    <!-- spotless:off -->
+    <jacocoArgLine></jacocoArgLine>
+    <!-- spotless:on -->
   </properties>
 
   <dependencyManagement>
@@ -151,11 +155,17 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>3.5.2</version>
+          <configuration>
+            <argLine>@{jacocoArgLine}</argLine>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
           <version>3.5.2</version>
+          <configuration>
+            <argLine>@{jacocoArgLine}</argLine>
+          </configuration>
           <executions>
             <execution>
               <goals>
@@ -411,6 +421,9 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
+            <configuration>
+              <propertyName>jacocoArgLine</propertyName>
+            </configuration>
             <executions>
               <execution>
                 <id>prepare-agent</id>

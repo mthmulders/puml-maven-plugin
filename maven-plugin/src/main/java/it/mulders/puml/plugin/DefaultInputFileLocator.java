@@ -16,8 +16,6 @@ package it.mulders.puml.plugin;
  * limitations under the License.
  */
 
-import static java.util.stream.Collectors.toList;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -47,7 +45,7 @@ public class DefaultInputFileLocator implements InputFileLocator {
 
         try {
             final List<File> files = FileUtils.getFiles(basedir, includes, excludes);
-            return files.stream().map(File::toURI).map(Paths::get).collect(toList());
+            return files.stream().map(File::toURI).map(Paths::get).toList();
         } catch (IOException e) {
             throw new MojoExecutionException("Could not determine files to process", e);
         }

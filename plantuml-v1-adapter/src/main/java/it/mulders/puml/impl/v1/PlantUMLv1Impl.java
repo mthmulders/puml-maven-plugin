@@ -31,8 +31,10 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import net.sourceforge.plantuml.preproc.Defines;
 import net.sourceforge.plantuml.FileFormat;
@@ -119,9 +121,8 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
     ItemOutput processDiagram(final String input, final OutputStream output, final PlantUmlOptions options)
             throws IOException {
         final ItemOutput.ItemOutputBuilder result = ItemOutput.builder();
-        final List<String> translatedPragmas = options.pragmas() != null ? options.pragmas().stream().map(p -> "!pragma " + p).toList() : List.of();
-        final SourceStringReader reader = new SourceStringReader(
-                Defines.createEmpty(), input, translatedPragmas);
+        final List<String> config = mapPragmasToConfig(options.pragmas());
+        final SourceStringReader reader = new SourceStringReader(Defines.createEmpty(), input, config);
 
         final String headless = System.getProperty(HEADLESS);
 
@@ -136,6 +137,29 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
         }
 
         return result.success(true).build();
+    }
+
+    private List<String> mapPragmasToConfig(final List<String> pragmas) {
+        if (pragmas == null || pragmas.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return pragmas.stream()
+                .map(this::mapPragmaToConfig)
+                .filter(Objects::nonNull)
+                .map(p -> "!pragma " + p)
+                .toList();
+    }
+
+    String mapPragmaToConfig(final String pragma) {
+        if (pragma == null || pragma.isEmpty() || pragma.trim().isEmpty()) {
+            return null;
+        }
+        if (pragma.contains("=")) {
+            final String part1 = pragma.substring(0, pragma.indexOf("="));
+            final String part2 = pragma.substring(pragma.indexOf("=") + 1);
+            return part1 + " " + part2;
+        }
+        return pragma;
     }
 
     FileFormatOption fileFormatOption(final PlantUmlOptions options) {

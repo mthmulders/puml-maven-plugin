@@ -223,4 +223,40 @@ class PlantUMLv1ImplTest implements WithAssertions {
                 .contains("<svg xmlns=\"http://www.w3.org/2000/svg\"")
                 .contains("</svg>");
     }
+
+    @Test
+    void should_convert_pragma_with_equals_sign() {
+        // Act
+        final String result = impl.mapPragmaToConfig("layout=smetana");
+
+        // Assert
+        assertThat(result).isEqualTo("layout smetana");
+
+    }
+
+    @Test
+    void should_convert_pragma_without_equals_sign() {
+        // Act
+        final String result = impl.mapPragmaToConfig("layout smetana");
+
+        // Assert
+        assertThat(result).isEqualTo("layout smetana");
+    }
+
+    @Test
+    void should_convert_empty_pragma() {
+        // Act, Assert
+        assertThat(impl.mapPragmaToConfig(" ")).isNull();
+        assertThat(impl.mapPragmaToConfig("\n")).isNull();
+        assertThat(impl.mapPragmaToConfig("")).isNull();
+    }
+
+    @Test
+    void should_convert_null_pragma() {
+        // Act
+        final String result = impl.mapPragmaToConfig(null);
+
+        // Assert
+        assertThat(result).isNull();
+    }
 }

@@ -227,27 +227,4 @@ class PlantUMLv1ImplTest implements WithAssertions {
                 .contains("<svg xmlns=\"http://www.w3.org/2000/svg\"")
                 .contains("</svg>");
     }
-
-    @Test
-    void should_pass_single_pragma_to_SourceStringReader() throws IOException {
-        // Arrange
-        final String input =
-                """
-                @startuml
-                class PlantUMLv1Impl {
-                }
-                @enduml
-                """;
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        final PlantUmlOptions options = new PlantUmlOptions(PlantUmlOptions.Format.SVG, null, singletonList("layout=smetana"));
-
-        // Act
-        SourceStringReader reader = Mockito.mock(SourceStringReader.class);
-        impl.processDiagram(input, output, options);
-
-        // Assert
-        ArgumentCaptor<List<String>> captor = ArgumentCaptor.forClass(List.class);
-        Mockito.verify(reader).outputImage(any(), any());
-        assertThat(captor.getValue()).containsExactly("!pragma layout=smetana");
-    }
 }

@@ -32,7 +32,7 @@ import java.util.List;
 public class PragmaUsageIT {
     @MavenTest
     @MavenGoal("generate-resources")
-    void should_generate_single_pragma(final MavenExecutionResult result) throws IOException {
+    void should_work_with_single_pragma(final MavenExecutionResult result) throws IOException {
         assertThat(result).isSuccessful();
 
         final Path baseDir = result.getMavenProjectResult().getTargetProjectDirectory();
@@ -48,18 +48,17 @@ public class PragmaUsageIT {
 
     @MavenTest
     @MavenGoal("generate-resources")
-    void should_generate_multiple_pragmas(final MavenExecutionResult result) throws IOException {
+    void should_work_with_multiple_pragmas(final MavenExecutionResult result) throws IOException {
         assertThat(result).isSuccessful();
 
         final Path baseDir = result.getMavenProjectResult().getTargetProjectDirectory();
         final Path outputDirectory = baseDir.resolve(Paths.get("target", "plantuml"));
         assertThat(outputDirectory).exists().isDirectory();
 
-        final Path outputFile1 = outputDirectory.resolve(Paths.get("docs", "example1.svg"));
-        final Path outputFile2 = outputDirectory.resolve(Paths.get("docs", "example2.svg"));
+        final Path outputFile = outputDirectory.resolve(Paths.get("docs", "example.svg"));
 
         final List<String> log = Files.readAllLines(result.getMavenLog().getStdout());
         assertThat(log).anySatisfy(line -> assertThat(line).contains("Using PlantUML version"));
-        assertThat(Files.walk(outputDirectory)).contains(outputFile1, outputFile2);
+        assertThat(Files.walk(outputDirectory)).contains(outputFile);
     }
 }

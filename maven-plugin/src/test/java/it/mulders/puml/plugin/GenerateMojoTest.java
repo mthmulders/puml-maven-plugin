@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
+import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOutput;
 import java.io.File;
 import java.nio.file.Path;

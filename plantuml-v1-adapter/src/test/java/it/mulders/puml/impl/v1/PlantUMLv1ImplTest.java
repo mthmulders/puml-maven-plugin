@@ -31,8 +31,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import net.sourceforge.plantuml.FileFormatOption;
+import net.sourceforge.plantuml.SourceStringReader;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -40,11 +42,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PlantUMLv1ImplTest implements WithAssertions {
     private static final PlantUmlOptions OPTIONS =
-            new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"));
+            new PlantUmlOptions(PlantUmlOptions.Format.SVG, Paths.get("src", "test", "resources"), null);
     private static final Path EXISTING = Paths.get("src", "test", "resources", "existing.puml");
 
     private final PlantUMLv1Impl impl = new PlantUMLv1Impl();
@@ -153,7 +157,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
     @ParameterizedTest
     void fileFormatOption(final PlantUmlOptions.Format format) {
         // Act
-        final FileFormatOption option = impl.fileFormatOption(new PlantUmlOptions(format, null));
+        final FileFormatOption option = impl.fileFormatOption(new PlantUmlOptions(format, null, null));
 
         // Assert
         assertThat(option).isNotNull();
@@ -178,5 +182,72 @@ class PlantUMLv1ImplTest implements WithAssertions {
         assertThat(output.toString())
                 .contains("<svg xmlns=\"http://www.w3.org/2000/svg\"")
                 .contains("</svg>");
+    }
+
+    @Test
+    void should_handle_null_pragmas() throws IOException {
+        // Arrange
+        final String input =
+                """
+                @startuml
+                class PlantUMLv1Impl {
+                }
+                @enduml
+                """;
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final PlantUmlOptions options = new PlantUmlOptions(PlantUmlOptions.Format.SVG, null, null);
+
+        // Act
+        impl.processDiagram(input, output, options);
+
+        // Assert
+        assertThat(output.toString())
+                .contains("<svg xmlns=\"http://www.w3.org/2000/svg\"")
+                .contains("</svg>");
+    }
+
+    @Test
+    void should_handle_single_pragma() throws IOException {
+        // Arrange
+        final String input =
+                """
+                @startuml
+                class PlantUMLv1Impl {
+                }
+                @enduml
+                """;
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final PlantUmlOptions options = new PlantUmlOptions(PlantUmlOptions.Format.SVG, null, singletonList("layout=smetana"));
+
+        // Act
+        impl.processDiagram(input, output, options);
+
+        // Assert
+        assertThat(output.toString())
+                .contains("<svg xmlns=\"http://www.w3.org/2000/svg\"")
+                .contains("</svg>");
+    }
+
+    @Test
+    void should_pass_single_pragma_to_SourceStringReader() throws IOException {
+        // Arrange
+        final String input =
+                """
+                @startuml
+                class PlantUMLv1Impl {
+                }
+                @enduml
+                """;
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final PlantUmlOptions options = new PlantUmlOptions(PlantUmlOptions.Format.SVG, null, singletonList("layout=smetana"));
+
+        // Act
+        SourceStringReader reader = Mockito.mock(SourceStringReader.class);
+        impl.processDiagram(input, output, options);
+
+        // Assert
+        ArgumentCaptor<List<String>> captor = ArgumentCaptor.forClass(List.class);
+        Mockito.verify(reader).outputImage(any(), any());
+        assertThat(captor.getValue()).containsExactly("!pragma layout=smetana");
     }
 }

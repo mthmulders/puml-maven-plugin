@@ -22,6 +22,7 @@ import it.mulders.puml.api.PlantUmlFacade;
 import it.mulders.puml.api.PlantUmlInput;
 import it.mulders.puml.api.PlantUmlOptions;
 import it.mulders.puml.api.PlantUmlOptions.Format;
+import it.mulders.puml.api.PlantUmlOutput;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>it.mulders.puml</groupId>
   <artifactId>puml-parent</artifactId>
-  <version>0.4-SNAPSHOT</version>
+  <version>0.4</version>
 
   <packaging>pom</packaging>
 
@@ -52,7 +52,7 @@
   <scm>
     <connection>scm:git:https://github.com/mthmulders/puml-maven-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:mthmulders/puml-maven-plugin.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v0.4</tag>
     <url>https://github.com/mthmulders/puml-maven-plugin</url>
   </scm>
 
@@ -74,7 +74,7 @@
     <junit-jupiter.version>5.11.4</junit-jupiter.version>
 
     <!-- spotless:off -->
-    <jacocoArgLine></jacocoArgLine>
+    <jacocoArgLine />
     <!-- spotless:on -->
   </properties>
 
@@ -282,7 +282,7 @@
                 <fail>true</fail>
                 <rules>
                   <!-- checks the dependencies and fails if the groupId:artifactId combination exists in the list of direct or transitive dependencies -->
-                  <banCircularDependencies></banCircularDependencies>
+                  <banCircularDependencies />
 
                   <!-- checks the dependencies and fails if any class is present in more than one dependency -->
                   <banDuplicateClasses>
@@ -297,7 +297,7 @@
                   </banVulnerable>
 
                   <!-- ensure all dependencies converge to the same version -->
-                  <dependencyConvergence></dependencyConvergence>
+                  <dependencyConvergence />
 
                   <!-- checks the dependencies transitively and fails if any class of any dependency is having its bytecode version higher than the one specified -->
                   <enforceBytecodeVersion>
@@ -343,14 +343,14 @@
               <palantirJavaFormat>
                 <version>2.50.0</version>
               </palantirJavaFormat>
-              <toggleOffOn></toggleOffOn>
+              <toggleOffOn />
             </java>
             <pom>
               <sortPom>
                 <expandEmptyElements>true</expandEmptyElements>
                 <spaceBeforeCloseEmptyElement>true</spaceBeforeCloseEmptyElement>
               </sortPom>
-              <toggleOffOn></toggleOffOn>
+              <toggleOffOn />
             </pom>
           </configuration>
           <executions>

@@ -40,6 +40,7 @@ import net.sourceforge.plantuml.preproc.Defines;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
+import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.version.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,7 +129,8 @@ public class PlantUMLv1Impl implements PlantUmlFacade {
 
         try {
             System.setProperty(HEADLESS, "true");
-            reader.outputImage(output, fileFormatOption(options));
+            DiagramDescription description = reader.outputImage(output, fileFormatOption(options));
+            log.info("Diagram description: {}", description);
         } finally {
             // Restore old value
             if (headless != null) {

@@ -39,7 +39,7 @@ Add the plugin to your POM.
 <plugin>
     <groupId>it.mulders.puml</groupId>
     <artifactId>plantuml-maven-plugin</artifactId>
-    <version>0.2</version>
+    <version>0.4.2</version>
     <dependencies>
         <!-- described below -->
     </dependencies>

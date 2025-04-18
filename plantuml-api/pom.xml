@@ -19,7 +19,7 @@
   <parent>
     <groupId>it.mulders.puml</groupId>
     <artifactId>puml-parent</artifactId>
-    <version>0.4.2</version>
+    <version>0.4.3-SNAPSHOT</version>
   </parent>
 
   <artifactId>plantuml-api</artifactId>

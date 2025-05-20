@@ -370,6 +370,8 @@
           <version>0.7.0</version>
           <extensions>true</extensions>
           <configuration>
+            <autoPublish>true</autoPublish>
+            <deploymentName>${project.name} ${project.version}</deploymentName>
             <excludeArtifacts>
               <excludeArtifact>plugin-tests</excludeArtifact>
             </excludeArtifacts>

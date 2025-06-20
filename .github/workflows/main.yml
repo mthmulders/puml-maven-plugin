@@ -47,11 +47,11 @@ jobs:
           restore-keys: |
             puml
 
-      - name: Download Apache Maven 3.9.6
+      - name: Download Apache Maven 3.9.9
         run: |
           pushd ~
-          curl -LOJ https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
-          tar -xzf apache-maven-3.9.6-bin.tar.gz
+          curl -LOJ https://archive.apache.org/dist/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
+          tar -xzf apache-maven-3.9.9-bin.tar.gz
 
       - name: Build and test code
-        run: ~/apache-maven-3.9.6/bin/mvn verify -B --no-transfer-progress
+        run: ~/apache-maven-3.9.9/bin/mvn verify -B --no-transfer-progress

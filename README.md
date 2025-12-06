@@ -73,7 +73,7 @@ For example:
 Finally, you can configure the plugin using the standard Maven plugin mechanism.
 Details are below.
 
-The [integration tests](tree/main/tests) contain more examples which are verified with each build of the plugin.
+The [integration tests](tests/) contain more examples which are verified with each build of the plugin.
 
 ## Goals
 This plugin provides one goal.

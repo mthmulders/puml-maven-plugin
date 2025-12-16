@@ -51,9 +51,11 @@ class GenerateMojoTest implements WithAssertions {
     private final GenerateMojo mojo = new GenerateMojo(inputFileLocator, plantUmlFactory);
 
     @BeforeEach
-    void mock_PlantUML_implementation() {
+    void mock_PlantUML_implementation() throws MojoExecutionException {
         when(plantUmlFactory.findPlantUmlImplementation()).thenReturn(Optional.of(plantUml));
         when(plantUml.process(any(), any())).thenReturn(new PlantUmlOutput.Success(0));
+        when(inputFileLocator.determineFilesForProcessing(any()))
+                .thenReturn(singletonList(Paths.get("./example.puml")));
     }
 
     @Test

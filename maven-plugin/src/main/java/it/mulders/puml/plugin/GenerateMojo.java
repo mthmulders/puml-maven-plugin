@@ -106,6 +106,12 @@ public class GenerateMojo extends AbstractMojo {
         }
 
         final Collection<Path> filesForProcessing = inputFileLocator.determineFilesForProcessing(this.sourceFiles);
+        if (filesForProcessing.isEmpty()) {
+            log.info("No files to process.");
+            log.info("In directory {}, no files match includes {} and excludes {}",
+                    this.sourceFiles.getDirectory(), this.sourceFiles.getIncludes(), this.sourceFiles.getExcludes());
+            return;
+        }
 
         final PlantUmlFacade plantUml = findPlantUmlFacade();
 

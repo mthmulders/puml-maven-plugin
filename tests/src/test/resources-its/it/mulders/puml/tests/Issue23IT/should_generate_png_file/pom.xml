@@ -32,8 +32,8 @@
     <build>
         <resources>
             <resource>
-                <directory>\${project.basedir}/src/main/resources</directory>
-                <targetPath>\${project.build.directory}/generated-docs</targetPath>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <targetPath>${project.build.directory}/generated-docs</targetPath>
             </resource>
         </resources>
         <plugins>
@@ -45,29 +45,29 @@
             <plugin>
                 <groupId>it.mulders.puml</groupId>
                 <artifactId>plantuml-maven-plugin</artifactId>
-                <version>\${plantuml-maven-plugin.version}</version>
+                <version>${plantuml-maven-plugin.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>it.mulders.puml</groupId>
                         <artifactId>plantuml-v1-adapter</artifactId>
-                        <version>\${plantuml-maven-plugin.version}</version>
+                        <version>${plantuml-maven-plugin.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>net.sourceforge.plantuml</groupId>
                         <artifactId>plantuml</artifactId>
-                        <version>\${plantuml.version}</version>
+                        <version>${plantuml.version}</version>
                     </dependency>
                 </dependencies>
                 <configuration>
                     <format>PNG</format>
-                    <outputDirectory>\${project.reporting.outputDirectory}</outputDirectory>
+                    <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
                     <sourceFiles>
-                        <directory>\${project.build.directory}/generated-docs</directory>
+                        <directory>${project.build.directory}/generated-docs</directory>
                         <includes>
                             <include>**/*.plantuml</include>
                         </includes>
                     </sourceFiles>
-                    <stripPath>\${project.build.directory}/generated-docs</stripPath>
+                    <stripPath>${project.build.directory}/generated-docs</stripPath>
                 </configuration>
                 <executions>
                     <execution>

@@ -86,10 +86,6 @@
         <filtering>true</filtering>
         <directory>src/test/resources</directory>
       </testResource>
-      <testResource>
-        <filtering>true</filtering>
-        <directory>src/test/resources-its</directory>
-      </testResource>
     </testResources>
 
     <plugins>
@@ -99,11 +95,12 @@
         <version>${itf.version}</version>
         <executions>
           <execution>
-            <id>install-plugin</id>
+            <id>installing</id>
+            <phase>pre-integration-test</phase>
             <goals>
               <goal>install</goal>
+              <goal>resources-its</goal>
             </goals>
-            <phase>pre-integration-test</phase>
           </execution>
         </executions>
       </plugin>
@@ -116,16 +113,6 @@
             <maven.version>${maven.version}</maven.version>
             <maven.home>${maven.home}</maven.home>
           </systemPropertyVariables>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <configuration>
-          <!-- necessary to prevent the test case pom.xml files from being filtered;
-                         use \${project.basedir} to refer to the test case project basedir. -->
-          <escapeString>\</escapeString>
         </configuration>
       </plugin>
     </plugins>

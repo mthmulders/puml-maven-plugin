@@ -47,7 +47,7 @@
                 <configuration>
                     <format>PNG</format>
                     <sourceFiles>
-                        <directory>\${project.basedir}</directory>
+                        <directory>${project.basedir}</directory>
                         <includes>
                             <include>src/main/docs/**/*.puml</include>
                         </includes>

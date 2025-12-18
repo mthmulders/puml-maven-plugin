@@ -71,6 +71,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
 
+
     <junit-jupiter.version>6.0.0</junit-jupiter.version>
 
     <!-- spotless:off -->
@@ -275,52 +276,45 @@
               <version>3.2.0</version>
             </dependency>
           </dependencies>
-          <executions>
-            <execution>
-              <id>enforce-rules</id>
-              <goals>
-                <goal>enforce</goal>
-              </goals>
-              <configuration>
-                <fail>true</fail>
-                <rules>
-                  <!-- checks the dependencies and fails if the groupId:artifactId combination exists in the list of direct or transitive dependencies -->
-                  <banCircularDependencies />
+          <configuration>
+            <fail>true</fail>
+            <rules>
+              <!-- checks the dependencies and fails if the groupId:artifactId combination exists in the list of direct or transitive dependencies -->
+              <banCircularDependencies />
 
-                  <!-- checks the dependencies and fails if any class is present in more than one dependency -->
-                  <banDuplicateClasses>
-                    <scopes>
-                      <scope>runtime</scope>
-                    </scopes>
-                  </banDuplicateClasses>
+              <!-- checks the dependencies and fails if any class is present in more than one dependency -->
+              <banDuplicateClasses>
+                <scopes>
+                  <scope>runtime</scope>
+                </scopes>
+              </banDuplicateClasses>
 
-                  <!-- checks the dependencies and fails if any dependencies with known vulnerabilities are in use. -->
-                  <banVulnerable implementation="org.sonatype.ossindex.maven.enforcer.BanVulnerableDependencies">
-                    <scope>runtime</scope>
-                  </banVulnerable>
+              <!-- checks the dependencies and fails if any dependencies with known vulnerabilities are in use. -->
+              <banVulnerable implementation="org.sonatype.ossindex.maven.enforcer.BanVulnerableDependencies">
+                <scope>runtime</scope>
+              </banVulnerable>
 
-                  <!-- ensure all dependencies converge to the same version -->
-                  <dependencyConvergence />
+              <!-- ensure all dependencies converge to the same version -->
+              <dependencyConvergence />
 
-                  <!-- checks the dependencies transitively and fails if any class of any dependency is having its bytecode version higher than the one specified -->
-                  <enforceBytecodeVersion>
-                    <maxJdkVersion>${maven.compiler.source}</maxJdkVersion>
-                  </enforceBytecodeVersion>
+              <!-- checks the dependencies transitively and fails if any class of any dependency is having its bytecode version higher than the one specified -->
+              <enforceBytecodeVersion>
+                <maxJdkVersion>${maven.compiler.release}</maxJdkVersion>
+              </enforceBytecodeVersion>
 
-                  <!--
-                  enforces the JDK version -->
-                  <requireJavaVersion>
-                    <version>${maven.compiler.source}</version>
-                  </requireJavaVersion>
+              <!--
+              enforces the JDK version -->
+              <requireJavaVersion>
+                <version>${maven.compiler.release}</version>
+              </requireJavaVersion>
 
-                  <!-- enforces the Maven version -->
-                  <requireMavenVersion>
-                    <version>3.6.3</version>
-                  </requireMavenVersion>
-                </rules>
-              </configuration>
-            </execution>
-          </executions>
+              <!-- enforces the Maven version -->
+              <requireMavenVersion>
+
+                <version>[3.6.3,3.99.99)</version>
+              </requireMavenVersion>
+            </rules>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -401,6 +395,18 @@
       <plugin>
         <groupId>org.sonatype.central</groupId>
         <artifactId>central-publishing-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-rules</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

@@ -76,6 +76,7 @@
     <!-- spotless:off -->
     <jacocoArgLine />
     <!-- spotless:on -->
+    <pitest.format>html</pitest.format>
   </properties>
 
   <dependencyManagement>
@@ -240,7 +241,7 @@
               <excludedClass>*Builder</excludedClass>
             </excludedClasses>
             <outputFormats>
-              <format>stryker-dashboard</format>
+              <format>${pitest.format}</format>
             </outputFormats>
             <pluginConfiguration>
               <stryker.moduleName>${project.artifactId}</stryker.moduleName>
@@ -498,6 +499,17 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>stryker-dashboard</id>
+      <activation>
+        <property>
+          <name>env.STRYKER_DASHBOARD_API_KEY</name>
+        </property>
+      </activation>
+      <properties>
+        <pitest.format>stryker-dashboard</pitest.format>
+      </properties>
     </profile>
   </profiles>
 

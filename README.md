@@ -146,11 +146,13 @@ Do you have an idea for this plugin, or want to report a bug?
 All contributions are welcome!
 Feel free to [file an issue](https://github.com/mthmulders/puml-maven-plugin/issues/new) with your idea, question or whatever it is you want to contribute.
 
+## Acknowledgements
+
 I want to thank all contributors who already helped to improve this project:
 
 * [@kwin](https://github.com/kwin) for reporting issues.
 * [@jeffjensen](https://github.com/jeffjensen) for reporting issues.
-* [@Bukama](https://github.com/Bukama) for reporting issues.
+* [@Bukama](https://github.com/Bukama) for reporting issues and code contributions.
 
 ## License
 The PUML Maven Plugin is licensed under the Apache License, version 2.

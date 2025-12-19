@@ -291,6 +291,7 @@
 
               <!-- checks the dependencies and fails if any dependencies with known vulnerabilities are in use. -->
               <banVulnerable implementation="org.sonatype.ossindex.maven.enforcer.BanVulnerableDependencies">
+                <authId>ossindex</authId>
                 <scope>runtime</scope>
               </banVulnerable>
 

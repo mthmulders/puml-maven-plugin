@@ -53,5 +53,22 @@ jobs:
           curl -LOJ https://archive.apache.org/dist/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
           tar -xzf apache-maven-3.9.9-bin.tar.gz
 
+      - name: Prepare OSS Index credentials
+        shell: bash
+        run: |
+          mkdir -p ~/.m2
+          cat << EOF > ~/.m2/settings.xml
+          <?xml version="1.0" encoding="UTF-8"?>
+          <settings>
+            <servers>
+              <server>
+                <id>ossindex</id>
+                <username>${{ secrets.OSS_INDEX_USERNAME }}</username>
+                <password>${{ secrets.OSS_INDEX_PASSWORD }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
       - name: Build and test code
         run: ~/apache-maven-3.9.9/bin/mvn verify -B --no-transfer-progress

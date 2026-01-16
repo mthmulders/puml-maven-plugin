@@ -381,9 +381,7 @@
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <configuration combine.children="append">
-          <excludes>
-            <exclude>.mvn/.gitkeep</exclude>
-          </excludes>
+          <inputExclude>.mvn/.gitkeep</inputExclude>
         </configuration>
         <executions>
           <execution>

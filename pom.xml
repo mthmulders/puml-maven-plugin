@@ -71,7 +71,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
 
-
     <junit-jupiter.version>6.0.2</junit-jupiter.version>
 
     <!-- spotless:off -->
@@ -265,18 +264,6 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>3.6.2</version>
-          <dependencies>
-            <dependency>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>extra-enforcer-rules</artifactId>
-              <version>1.11.0</version>
-            </dependency>
-            <dependency>
-              <groupId>org.sonatype.ossindex.maven</groupId>
-              <artifactId>ossindex-maven-enforcer-rules</artifactId>
-              <version>3.2.0</version>
-            </dependency>
-          </dependencies>
           <configuration>
             <fail>true</fail>
             <rules>
@@ -317,6 +304,18 @@
               </requireMavenVersion>
             </rules>
           </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>extra-enforcer-rules</artifactId>
+              <version>1.11.0</version>
+            </dependency>
+            <dependency>
+              <groupId>org.sonatype.ossindex.maven</groupId>
+              <artifactId>ossindex-maven-enforcer-rules</artifactId>
+              <version>3.2.0</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -424,10 +423,10 @@
             <artifactId>maven-source-plugin</artifactId>
             <executions>
               <execution>
-                <phase>package</phase>
                 <goals>
                   <goal>jar</goal>
                 </goals>
+                <phase>package</phase>
               </execution>
             </executions>
           </plugin>
@@ -436,10 +435,10 @@
             <artifactId>maven-javadoc-plugin</artifactId>
             <executions>
               <execution>
-                <phase>package</phase>
                 <goals>
                   <goal>jar</goal>
                 </goals>
+                <phase>package</phase>
               </execution>
             </executions>
           </plugin>

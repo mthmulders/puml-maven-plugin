@@ -163,8 +163,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
     @Test
     void process_diagram_should_write_diagram_to_output_stream() throws IOException {
         // Arrange
-        final String input =
-                """
+        final String input = """
                 @startuml
                 class PlantUMLv1Impl {
                 }
@@ -184,8 +183,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
     @Test
     void should_handle_null_pragmas() throws IOException {
         // Arrange
-        final String input =
-                """
+        final String input = """
                 @startuml
                 class PlantUMLv1Impl {
                 }
@@ -206,8 +204,7 @@ class PlantUMLv1ImplTest implements WithAssertions {
     @Test
     void should_handle_single_pragma() throws IOException {
         // Arrange
-        final String input =
-                """
+        final String input = """
                 @startuml
                 class PlantUMLv1Impl {
                 }
@@ -245,7 +242,6 @@ class PlantUMLv1ImplTest implements WithAssertions {
 
         // Assert
         assertThat(result).isEqualTo("layout smetana");
-
     }
 
     @Test

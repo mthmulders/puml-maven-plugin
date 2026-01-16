@@ -96,11 +96,11 @@
         <executions>
           <execution>
             <id>installing</id>
-            <phase>pre-integration-test</phase>
             <goals>
               <goal>install</goal>
               <goal>resources-its</goal>
             </goals>
+            <phase>pre-integration-test</phase>
           </execution>
         </executions>
       </plugin>

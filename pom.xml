@@ -346,7 +346,7 @@
             </java>
             <pom>
               <sortPom>
-                <expandEmptyElements>true</expandEmptyElements>
+                <expandEmptyElements>false</expandEmptyElements>
                 <spaceBeforeCloseEmptyElement>true</spaceBeforeCloseEmptyElement>
               </sortPom>
               <toggleOffOn />

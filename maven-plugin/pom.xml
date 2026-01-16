@@ -122,9 +122,7 @@
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <configuration>
-          <excludes>
-            <exclude>src/test/resources/locating/*</exclude>
-          </excludes>
+          <inputExclude>src/test/resources/locating/*</inputExclude>
         </configuration>
       </plugin>
       <plugin>

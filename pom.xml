@@ -331,7 +331,7 @@
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
-          <version>0.16.1</version>
+          <version>0.17</version>
         </plugin>
         <plugin>
           <groupId>com.diffplug.spotless</groupId>
@@ -381,9 +381,7 @@
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <configuration combine.children="append">
-          <excludes>
-            <exclude>.mvn/.gitkeep</exclude>
-          </excludes>
+          <inputExclude>.mvn/.gitkeep</inputExclude>
         </configuration>
         <executions>
           <execution>

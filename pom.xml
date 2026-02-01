@@ -232,7 +232,7 @@
         <plugin>
           <groupId>org.pitest</groupId>
           <artifactId>pitest-maven</artifactId>
-          <version>1.21.0</version>
+          <version>1.22.0</version>
           <configuration>
             <avoidCallsTo>
               <avoidCallsTo>org.slf4j</avoidCallsTo>

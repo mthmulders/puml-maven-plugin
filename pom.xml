@@ -52,7 +52,6 @@
   <scm>
     <connection>scm:git:https://github.com/mthmulders/puml-maven-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:mthmulders/puml-maven-plugin.git</developerConnection>
-    <tag>v0.4.16</tag>
     <url>https://github.com/mthmulders/puml-maven-plugin</url>
   </scm>
 

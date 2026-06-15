@@ -27,7 +27,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @MavenJupiterExtension
 public class Issue23IT {
     @MavenTest

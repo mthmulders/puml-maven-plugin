@@ -69,6 +69,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.outputTimestamp>2026-07-17T12:10:06Z</project.build.outputTimestamp>
     <maven.compiler.release>21</maven.compiler.release>
 
     <junit-jupiter.version>6.1.1</junit-jupiter.version>

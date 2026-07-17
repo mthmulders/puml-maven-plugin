@@ -25,6 +25,7 @@
 [![Mutation testing badge](https://img.shields.io/endpoint?style=plastic&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmthmulders%2Fpuml-maven-plugin%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/mthmulders/puml-maven-plugin/main)
 [![Maven Central](https://img.shields.io/maven-central/v/it.mulders.puml/plantuml-maven-plugin.svg?color=brightgreen&label=Maven%20Central)](https://search.maven.org/artifact/it.mulders.puml/plantuml-maven-plugin)
 [![](https://img.shields.io/github/license/mthmulders/puml-maven-plugin.svg)](./LICENSE)
+[![Reproducible Builds](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jvm-repo-rebuild/reproducible-central/master/content/it/mulders/puml/badge.json)](https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/it/mulders/puml/README.md)
 
 ## Requirements
 Initially, this plugin required your build to run on Java 8 or higher.

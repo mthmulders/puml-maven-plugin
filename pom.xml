@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>it.mulders.puml</groupId>
   <artifactId>puml-parent</artifactId>
-  <version>0.5.1-SNAPSHOT</version>
+  <version>0.5.1</version>
 
   <packaging>pom</packaging>
 
@@ -53,7 +53,7 @@
     <connection>scm:git:https://github.com/mthmulders/puml-maven-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:mthmulders/puml-maven-plugin.git</developerConnection>
     <url>https://github.com/mthmulders/puml-maven-plugin</url>
-    <tag>v0.5.0</tag>
+    <tag>v0.5.1</tag>
   </scm>
 
   <distributionManagement>
@@ -69,7 +69,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.outputTimestamp>2026-07-17T12:10:06Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2026-07-17T11:20:13Z</project.build.outputTimestamp>
     <maven.compiler.release>21</maven.compiler.release>
 
     <junit-jupiter.version>6.1.1</junit-jupiter.version>
